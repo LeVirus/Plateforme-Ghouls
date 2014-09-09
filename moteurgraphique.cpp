@@ -22,7 +22,7 @@ void MoteurGraphique::initialiser( Moteur *ptrMoteur ){
     if( ptrMoteur )
         mPtrMemMoteur = ptrMoteur;
     mFenetre.create(sf::VideoMode( LARGEUR_ECRAN, LONGUEUR_ECRAN ), "ghouls", sf::Style::Default );
-    mFenetre.setView( mCamera );
+    //mFenetre.setView( mCamera );
     mFenetre.setFramerateLimit(60);
     initialiserVertexArray();
 }
@@ -32,25 +32,25 @@ void MoteurGraphique::initialiser( Moteur *ptrMoteur ){
  */
 void MoteurGraphique::initialiserVertexArray(){
 
+    unsigned int uiPosCaseX = 0, uiPosCaseY = 0;
+
     //détermination du type du tableau de vertex
     mVertArrayTileMap.setPrimitiveType ( sf::Quads );
     mVertArrayTileMap.resize ( NBR_TUILE_ECRAN_X * NBR_TUILE_ECRAN_Y * 4 );
 
-    //initialisation de la premiere case a partir de 0,0
-    mVertArrayTileMap[ 0 ].position = sf::Vector2f(0, 0);
-    mVertArrayTileMap[ 1 ].position = sf::Vector2f( TAILLE_TUILE, 0 );
-    mVertArrayTileMap[ 2 ].position = sf::Vector2f( TAILLE_TUILE, TAILLE_TUILE );
-    mVertArrayTileMap[ 3 ].position = sf::Vector2f( 0, TAILLE_TUILE );
-
     //traitement de toutes les autres cases
-    for( unsigned int i = 4 ; i < NBR_TUILE_ECRAN_X * NBR_TUILE_ECRAN_Y * 4 ; i += 4 ){
-        mVertArrayTileMap[ i ].position = sf::Vector2f( mVertArrayTileMap[ i - 3 ].position );
-        mVertArrayTileMap[ i + 1 ].position =
-                sf::Vector2f( TAILLE_TUILE * ( i % NBR_TUILE_ECRAN_X + 1 ), TAILLE_TUILE * ( i / NBR_TUILE_ECRAN_X ) );
-        mVertArrayTileMap[ i + 2 ].position =
-                sf::Vector2f( TAILLE_TUILE * ( i % NBR_TUILE_ECRAN_X + 1 ), TAILLE_TUILE * ( i / NBR_TUILE_ECRAN_X + 1 ) );
-        mVertArrayTileMap[ i + 3 ].position = sf::Vector2f( mVertArrayTileMap[ i - 2 ].position );
+    for( unsigned int i = 0 ; i < NBR_TUILE_ECRAN_X * NBR_TUILE_ECRAN_Y * 4 ; i += 4 ){
+        if( uiPosCaseX == NBR_TUILE_ECRAN_X ){
+            uiPosCaseX = 0;
+            uiPosCaseY++;
+        }
+        mVertArrayTileMap[ i ].position = sf::Vector2f( uiPosCaseX * TAILLE_TUILE, uiPosCaseY * TAILLE_TUILE );
+        mVertArrayTileMap[ i + 1 ].position = sf::Vector2f( mVertArrayTileMap[ i ].position.x + TAILLE_TUILE, mVertArrayTileMap[ i ].position.y );
+        mVertArrayTileMap[ i + 2 ].position = sf::Vector2f(
+                    mVertArrayTileMap[ i ].position.x + TAILLE_TUILE, mVertArrayTileMap[ i ].position.y + TAILLE_TUILE );
+        mVertArrayTileMap[ i + 3 ].position = sf::Vector2f( mVertArrayTileMap[ i ].position.x, mVertArrayTileMap[ i ].position.y + TAILLE_TUILE );
 
+        uiPosCaseX++;
     }
 }
 
@@ -72,14 +72,13 @@ void MoteurGraphique::raffraichirEcran(){
             std::cerr<<"Erreur bDessinerVertArrayNiveau"<<std::endl;
         erreur = true;
         }
-        /*if( ! bDessinerVertArrayNiveau( tabEcran ) ){
-            std::cerr<<"Erreur bDessinerVertArrayNiveau"<<std::endl;
-        erreur = true;
-        }*/
+
         if( ! erreur ){
-            mFenetre.clear(sf::Color::Black);
-                    mFenetre.draw(mVertArrayTileMap, &textureA);
-                    mFenetre.display();
+            mFenetre.clear( sf::Color::Black );
+            //mFenetre.setView( mCamera );
+
+            mFenetre.draw( mVertArrayTileMap, &textureA );
+            mFenetre.display();
         }
     }
 }
@@ -94,10 +93,16 @@ void MoteurGraphique::raffraichirEcran(){
  */
 bool MoteurGraphique::bDessinerVertArrayNiveau( const Tableau2D &tabNivEcran ){
     bool retour = true;
-    unsigned int uiCoordBlockX, uiCoordBlockY;//uiCoordTabX = 0, uiCoordTabY = 0;
-    for(unsigned int i = 0; i < tabNivEcran.getTailleTotale() ; ++i){
+    unsigned int uiCoordBlockX, uiCoordBlockY, uiCoordTabX = 0, uiCoordTabY = 0;
+    for( unsigned int i = 0; i < mVertArrayTileMap.getVertexCount() ; i+=4 ){
+
+        if( uiCoordTabX == NBR_TUILE_ECRAN_X ){
+            uiCoordTabY++;
+            uiCoordTabX = 0;
+        }
+
         //récupération de la valeur de la case correspondante a i
-        switch( tabNivEcran.getValAt( i % tabNivEcran.getLongueur(), i / tabNivEcran.getLongueur() ) ){
+        switch( tabNivEcran.getValAt( uiCoordTabX, uiCoordTabY ) ){
         case BLOCK_A:
             uiCoordBlockX = 60;
             uiCoordBlockY = 142;
@@ -127,6 +132,8 @@ bool MoteurGraphique::bDessinerVertArrayNiveau( const Tableau2D &tabNivEcran ){
         mVertArrayTileMap[ i + 1 ].texCoords = sf::Vector2f( uiCoordBlockX + TAILLE_TUILE, uiCoordBlockY );
         mVertArrayTileMap[ i + 2 ].texCoords = sf::Vector2f( uiCoordBlockX + TAILLE_TUILE, uiCoordBlockY  + TAILLE_TUILE );
         mVertArrayTileMap[ i + 3 ].texCoords = sf::Vector2f( uiCoordBlockX, uiCoordBlockY + TAILLE_TUILE ) ;
+
+        uiCoordTabX++;
 
     }
     return retour;

@@ -17,7 +17,7 @@ bool Jeu::lancer(){
     if( ! mNiveau.bInitialiserNiveau( uiNumNiveau ) )
         return false;
     mNiveau.verifDebutNiveau();
-mNiveau.afficherNivEcran();
+//mNiveau.afficherNivEcran();
     mMoteurPrincipal.lancer();
     return true;
 }
