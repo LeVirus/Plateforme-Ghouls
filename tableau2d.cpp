@@ -196,7 +196,7 @@ std::pair< unsigned int, unsigned int > Tableau2D::getCoordCase( const float &fP
  * envoie en référence constante.
  * @param uiCaseX Abscisse de la case
  * @param uiCaseY Ordonnée de la case
- * @param La valeur de la case
+ * @return La valeur de la case
  */
 const unsigned char &Tableau2D::getValAt( const unsigned int &uiCaseX, const unsigned int &uiCaseY )const{
     if( uiCaseX > muiLongueurTab || uiCaseY > muiLargeurTab ){

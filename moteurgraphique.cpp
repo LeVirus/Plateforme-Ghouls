@@ -22,7 +22,9 @@ void MoteurGraphique::initialiser( Moteur *ptrMoteur ){
     if( ptrMoteur )
         mPtrMemMoteur = ptrMoteur;
     mFenetre.create(sf::VideoMode( LARGEUR_ECRAN, LONGUEUR_ECRAN ), "ghouls", sf::Style::Default );
-    //mFenetre.setView( mCamera );
+
+    mCamera.reset( sf::FloatRect( 0, 0, LONGUEUR_ECRAN , LARGEUR_ECRAN ) );
+    mFenetre.setView( mCamera );
     mFenetre.setFramerateLimit(60);
     initialiserVertexArray();
 }
@@ -75,7 +77,7 @@ void MoteurGraphique::raffraichirEcran(){
 
         if( ! erreur ){
             mFenetre.clear( sf::Color::Black );
-            //mFenetre.setView( mCamera );
+            mFenetre.setView( mCamera );
 
             mFenetre.draw( mVertArrayTileMap, &textureA );
             mFenetre.display();
@@ -174,18 +176,26 @@ std::pair< float, float > MoteurGraphique::pairGetPosEcran(){
  */
 void MoteurGraphique::deplacerEcran( unsigned char direction,
                                      float nombrePixelDeplacement ){
+
+    std::pair< float, float > pairPosEcranTmp = pairGetPosEcran();
     float fMoveX = 0, fMoveY = 0;
+
     switch( direction ){//a modifier insérer les opérations logiques
     case HAUT:
-        fMoveY = -1 * nombrePixelDeplacement;
+        //si position ecran actuelle == la limite du niveau
+        if( ! ( mPairLimiteDeplacementEcranHG.second - pairPosEcranTmp.second ) < 0.1 )
+            fMoveY = -1 * nombrePixelDeplacement;
         break;
     case DROITE:
+        if( ! ( mPairLimiteDeplacementEcranBD.first - pairPosEcranTmp.first ) < 0.1 )
         fMoveX = nombrePixelDeplacement;
         break;
     case GAUCHE:
+        if( ! ( mPairLimiteDeplacementEcranHG.first - pairPosEcranTmp.first ) < 0.1 )
         fMoveX = -1 * nombrePixelDeplacement;
         break;
     case BAS:
+        if( !  ( mPairLimiteDeplacementEcranHG.second - pairPosEcranTmp.second ) < 0.1 )
         fMoveY = nombrePixelDeplacement;
         break;
     }
@@ -213,21 +223,29 @@ void MoteurGraphique::correctionDeplacementCamera(
 
     //si la caméra dépace par la gauche
     if( fMoveX < 0 && fMemX < mPairLimiteDeplacementEcranHG.first ){
-        fMoveX = ( mPairLimiteDeplacementEcranHG.first - pairCoordEcran.first ) * -1;
+        //fMoveX = ( mPairLimiteDeplacementEcranHG.first - pairCoordEcran.first ) * -1;
+        //fMemX = mPairLimiteDeplacementEcranHG.first;
+        fMoveX = 0.00;
     }
     //si la caméra dépace par la droite
     else if( fMemX > mPairLimiteDeplacementEcranBD.first ){
-        fMoveX = ( pairCoordEcran.first - mPairLimiteDeplacementEcranBD.first ) * -1;
+        //fMoveX = ( pairCoordEcran.first - mPairLimiteDeplacementEcranBD.first ) * -1;
+        //fMemX = mPairLimiteDeplacementEcranBD.first;
+        fMoveX = 0.00;
     }
 
 
     //si la caméra dépace par le haut
     if( fMoveY < 0 && fMemY < mPairLimiteDeplacementEcranHG.second ){
-        fMoveY = ( mPairLimiteDeplacementEcranHG.second - pairCoordEcran.second ) * -1;
+        //fMoveY = ( mPairLimiteDeplacementEcranHG.second - pairCoordEcran.second ) * -1;
+        //fMemY = mPairLimiteDeplacementEcranHG.second;
+        fMoveY = 0.00;
     }
     //si la caméra dépace par le bas
     else if( fMemY > mPairLimiteDeplacementEcranBD.second ){
-        fMoveY = ( pairCoordEcran.second - mPairLimiteDeplacementEcranBD.second ) * -1;
+        //fMoveY = ( pairCoordEcran.second - mPairLimiteDeplacementEcranBD.second ) * -1;
+        //fMemY = mPairLimiteDeplacementEcranBD.second;
+        fMoveY = 0.00;
     }
 }
 
