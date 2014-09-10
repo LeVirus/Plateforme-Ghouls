@@ -159,17 +159,18 @@ std::pair< unsigned int, unsigned int > Tableau2D::getCoordCase( const float &fP
     //la position 0,0 de l'écran correspond aux coordonnées du coin
     //haut gauche de la case du début du niveau
     int iPosCaseX = fPositionEcranX / TAILLE_TUILE,
+            iModCaseX = static_cast< int >( fPositionEcranX ) % TAILLE_TUILE,
             iPosCaseY = fPositionEcranY / TAILLE_TUILE,
-            iModCaseX = fPositionEcranX - iPosCaseX * TAILLE_TUILE,
-            iModCaseY = fPositionEcranY - iPosCaseY * TAILLE_TUILE;
-
+            iModCaseY = static_cast< int >( fPositionEcranY ) % TAILLE_TUILE;
     //conversion de la valeur trouvée avec la division vers la case
     //du tableau
     iPosCaseX += uiCaseDebutNivX;
     if( iModCaseX < 0 )
         iPosCaseX--;
 
+
     iPosCaseY += uiCaseDebutNivY;
+
     if( iModCaseY < 0 )
         iPosCaseY--;
 

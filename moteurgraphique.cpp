@@ -72,7 +72,7 @@ void MoteurGraphique::raffraichirEcran(){
 
         if( ! bDessinerVertArrayNiveau( tabEcran ) ){
             std::cerr<<"Erreur bDessinerVertArrayNiveau"<<std::endl;
-        erreur = true;
+            erreur = true;
         }
 
         if( ! erreur ){
@@ -143,7 +143,7 @@ bool MoteurGraphique::bDessinerVertArrayNiveau( const Tableau2D &tabNivEcran ){
 
 /**
  * @brief Fonction renvoyant un pair contenant la position de l'angle
- * Haut-Gauche de l'écran.
+ * Haut-Gauche de la caméra.
  * @return les coordonnées de coin Haut-Gauche de l'écran.
  */
 std::pair< float, float > MoteurGraphique::pairGetPosEcran(){
@@ -182,20 +182,20 @@ void MoteurGraphique::deplacerEcran( unsigned char direction,
 
     switch( direction ){//a modifier insérer les opérations logiques
     case HAUT:
-        //si position ecran actuelle == la limite du niveau
-        if( ! ( mPairLimiteDeplacementEcranHG.second - pairPosEcranTmp.second ) < 0.1 )
+        //si position ecran actuelle == la limite du niveau( coordonnées que la caméra ne doit pas dépacer )
+        //if( ! ( mPairLimiteDeplacementEcranHG.second - pairPosEcranTmp.second ) < 0.1 )
             fMoveY = -1 * nombrePixelDeplacement;
         break;
     case DROITE:
-        if( ! ( mPairLimiteDeplacementEcranBD.first - pairPosEcranTmp.first ) < 0.1 )
+        //if( ! ( mPairLimiteDeplacementEcranBD.first - pairPosEcranTmp.first ) < 0.1 )
         fMoveX = nombrePixelDeplacement;
         break;
     case GAUCHE:
-        if( ! ( mPairLimiteDeplacementEcranHG.first - pairPosEcranTmp.first ) < 0.1 )
+        //if( ! ( mPairLimiteDeplacementEcranHG.first - pairPosEcranTmp.first ) < 0.1 )
         fMoveX = -1 * nombrePixelDeplacement;
         break;
     case BAS:
-        if( !  ( mPairLimiteDeplacementEcranHG.second - pairPosEcranTmp.second ) < 0.1 )
+        //if( !  ( mPairLimiteDeplacementEcranHG.second - pairPosEcranTmp.second ) < 0.1 )
         fMoveY = nombrePixelDeplacement;
         break;
     }
@@ -206,12 +206,13 @@ void MoteurGraphique::deplacerEcran( unsigned char direction,
 /**
  * @brief Fonction de correction de dépassement éventuel des limites
  * du niveau.
- * @param &fMoveX La position de l'écran abscisse aprés le déplacement
- * @param &fMoveY La position de l'écran ordonnée aprés le déplacement
+ * @param &fMoveX Le nombre de pixels abscisse dont l'écran doit se déplacer.
+ * @param &fMoveY La nombre de pixels ordonnée dont l'écran doit se déplacer.
  */
 void MoteurGraphique::correctionDeplacementCamera(
         float &fMoveX, float &fMoveY ){
 
+    bool bAppliquerOp = false;
     float fMemX, fMemY;
     //coordonnées écran avant déplacement
     std::pair< float, float > pairCoordEcran = pairGetPosEcran();
@@ -223,29 +224,41 @@ void MoteurGraphique::correctionDeplacementCamera(
 
     //si la caméra dépace par la gauche
     if( fMoveX < 0 && fMemX < mPairLimiteDeplacementEcranHG.first ){
-        //fMoveX = ( mPairLimiteDeplacementEcranHG.first - pairCoordEcran.first ) * -1;
+        fMemX = mPairLimiteDeplacementEcranHG.first - pairCoordEcran.first;
         //fMemX = mPairLimiteDeplacementEcranHG.first;
         fMoveX = 0.00;
+        bAppliquerOp = true;
     }
     //si la caméra dépace par la droite
     else if( fMemX > mPairLimiteDeplacementEcranBD.first ){
-        //fMoveX = ( pairCoordEcran.first - mPairLimiteDeplacementEcranBD.first ) * -1;
+        fMemX = mPairLimiteDeplacementEcranBD.first - pairCoordEcran.first;
         //fMemX = mPairLimiteDeplacementEcranBD.first;
         fMoveX = 0.00;
+        bAppliquerOp = true;
     }
 
+    if( bAppliquerOp ){
+        mCamera.move( fMemX, 0 );
+        bAppliquerOp = false;
+    }
 
     //si la caméra dépace par le haut
     if( fMoveY < 0 && fMemY < mPairLimiteDeplacementEcranHG.second ){
-        //fMoveY = ( mPairLimiteDeplacementEcranHG.second - pairCoordEcran.second ) * -1;
+        fMemY = mPairLimiteDeplacementEcranHG.second - pairCoordEcran.second;
         //fMemY = mPairLimiteDeplacementEcranHG.second;
         fMoveY = 0.00;
+        bAppliquerOp = true;
     }
     //si la caméra dépace par le bas
     else if( fMemY > mPairLimiteDeplacementEcranBD.second ){
-        //fMoveY = ( pairCoordEcran.second - mPairLimiteDeplacementEcranBD.second ) * -1;
+        fMemY = mPairLimiteDeplacementEcranBD.second - pairCoordEcran.second;
         //fMemY = mPairLimiteDeplacementEcranBD.second;
         fMoveY = 0.00;
+        bAppliquerOp = true;
+    }
+
+    if( bAppliquerOp ){
+        mCamera.move( 0, fMemY );
     }
 }
 

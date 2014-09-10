@@ -19,7 +19,7 @@ class MoteurGraphique{
         sf::VertexArray mVertArrayTileMap;
         Moteur *mPtrMemMoteur;
         std::pair< float, float > mPairLimiteDeplacementEcranHG,
-mPairLimiteDeplacementEcranBD;
+        mPairLimiteDeplacementEcranBD;
     public:
         MoteurGraphique();
         void synchroniserNiveau();
@@ -27,9 +27,9 @@ mPairLimiteDeplacementEcranBD;
         void initialiserVertexArray();
         void initialiser( Moteur *ptrMoteur );
         void raffraichirEcran();
-void correctionDeplacementCamera( float &fMoveX,
-        float &fMoveY );
-bool bDessinerVertArrayNiveau( const Tableau2D &tabNivEcran );
+        void correctionDeplacementCamera( float &fMoveX,
+                                          float &fMoveY );
+        bool bDessinerVertArrayNiveau( const Tableau2D &tabNivEcran );
         bool bAfficherTuileEcran( const Tableau2D &tabNivEcran );
         void deplacerEcran( unsigned char direction, float nombrePixelDeplacement = 5 );
         ~MoteurGraphique();
