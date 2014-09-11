@@ -30,6 +30,8 @@ class MoteurGraphique{
         void correctionDeplacementCamera( float &fMoveX,
                                           float &fMoveY );
         void deplacerEcran( unsigned char direction, float nombrePixelDeplacement = 5 );
+        void positionnerTileMappingEcran();
+        void deplacerVertArrayEcran( float fPosX, float fPosY );
         bool bDessinerVertArrayNiveau( const Tableau2D &tabNivEcran );
         bool bAfficherTuileEcran( const Tableau2D &tabNivEcran );
         ~MoteurGraphique();

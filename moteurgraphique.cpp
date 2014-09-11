@@ -57,6 +57,47 @@ void MoteurGraphique::initialiserVertexArray(){
 }
 
 /**
+ * @brief Fonction d'affichage du tableau de Vertex (TileMapping).
+ * La fonction calcule la position que doit avoir le rectangle(par rapport à la caméra).
+ */
+void MoteurGraphique::positionnerTileMappingEcran(){
+    int memPosX, memPosY;
+    std::pair< float, float > pairPosEcran = pairGetPosEcran();
+
+    //traitement abscisses
+    memPosX = static_cast< int >( pairPosEcran.first ) % TAILLE_TUILE;
+    if( memPosX < 0 ){
+        //récupération de la valeur absolue pour pouvoir soustraire cette valeur à la position de l'écarn
+        memPosX = -1 * ( -32 - memPosX );
+    }
+    //traitement ordonnées
+    memPosY = static_cast< int >( pairPosEcran.second ) % TAILLE_TUILE;
+    if( memPosY < 0 ){
+        memPosY = -1 * ( -32 - memPosY );
+    }
+
+    //déplacement du tableau
+    deplacerVertArrayEcran( pairPosEcran.first - memPosX, pairPosEcran.second - memPosY );
+
+}
+
+/**
+ * @brief Fonction qui positionne tous les vertex (TileMapping) par rapport au coordonnées envoyées en argument.
+ * Le point [0] est pris pour référence.
+ * @param fPosX La nouvelle position du tableau de vertex abscisses
+ * @param fPosY La nouvelle position du tableau de vertex ordonnées
+ */
+void MoteurGraphique::deplacerVertArrayEcran( float fPosX, float fPosY ){
+    fPosX = fPosX - mVertArrayTileMap[ 0 ].position.x;
+    fPosY = fPosY - mVertArrayTileMap[ 0 ].position.y;
+    for( unsigned int i = 0; i < mVertArrayTileMap.getVertexCount() ; i++ ){
+        mVertArrayTileMap[ i ].position.x += fPosX;
+        mVertArrayTileMap[ i ].position.y += fPosY;
+    }
+}
+
+
+/**
  * @brief Fonction d'affichage du jeu
  * Récupération du tableau de l'écran courrant.
  */
@@ -79,6 +120,7 @@ void MoteurGraphique::raffraichirEcran(){
             mFenetre.clear( sf::Color::Black );
             mFenetre.setView( mCamera );
 
+            positionnerTileMappingEcran();
             mFenetre.draw( mVertArrayTileMap, &textureA );
             mFenetre.display();
         }

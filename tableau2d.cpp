@@ -149,12 +149,11 @@ bool Tableau2D::bRecupPortionTab(
 std::pair< unsigned int, unsigned int > Tableau2D::getCoordCase( const float &fPositionEcranX, const float &fPositionEcranY,
                                                                  const unsigned int &uiCaseDebutNivX, const unsigned int &uiCaseDebutNivY ){
 
-    //calcul du reste
     //verif si la case debut niveau est bien dans le tableau
-    if( HORS_TAB == getValAt( uiCaseDebutNivX, uiCaseDebutNivY ) ){
+    /*if( HORS_TAB == getValAt( uiCaseDebutNivX, uiCaseDebutNivY ) ){
         mPairCase.first = 100000;
         return mPairCase;
-    }
+    }*/
 
     //la position 0,0 de l'écran correspond aux coordonnées du coin
     //haut gauche de la case du début du niveau

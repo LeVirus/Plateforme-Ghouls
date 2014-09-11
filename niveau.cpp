@@ -133,11 +133,9 @@ void Niveau::synchroniserEcranNiveau(
 
     //calcul de la position maximale Droite de la caméra
     //AngleBD auquel on soustrait la taille de la caméra
-    int iDistanceX = ( mTabNiveau.getLongueur() -
-            ( muiCaseDebutNiveauX + mTabEcran.getLongueur() ) ) * TAILLE_TUILE,
+    int iDistanceX = ( mTabNiveau.getLongueur() - ( muiCaseDebutNiveauX + mTabEcran.getLongueur() ) ) * TAILLE_TUILE,
 
-    iDistanceY = ( mTabNiveau.getLargeur() -
-            ( muiCaseDebutNiveauY + mTabEcran.getLargeur() ) ) * TAILLE_TUILE;
+    iDistanceY = ( mTabNiveau.getLargeur() - ( muiCaseDebutNiveauY + mTabEcran.getLargeur() ) ) * TAILLE_TUILE;
 
     //Ecrire limite angle Bas-Droite
     pairPosEcranBD.first = static_cast< float >( iDistanceX );
