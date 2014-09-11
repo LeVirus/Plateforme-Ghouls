@@ -95,9 +95,9 @@ bool Tableau2D::bRecupPortionTab(
     std::vector< unsigned char > tmpVectNiv;
     unsigned int uiPositionVectEcran = 0,
                              uiMemCaseBasDroiteX = uiCaseHautGaucheX +
-                                 ( NBR_TUILE_ECRAN_X - 1 ),
+                                 ( NBR_TUILE_TILE_MAPPING_X - 1 ),
                              uiMemCaseBasDroiteY = uiCaseHautGaucheY +
-                                 ( NBR_TUILE_ECRAN_Y - 1 ),
+                                 ( NBR_TUILE_TILE_MAPPING_Y - 1 ),
                              uiTmpLongueurNiveau;
 
     /*std::cerr<<" var  bRecupPortion "<<uiCaseHautGaucheX<<"  "<<uiCaseHautGaucheY
@@ -128,9 +128,9 @@ bool Tableau2D::bRecupPortionTab(
         uiCaseHautGaucheX;
 
         std::copy ( &tmpVectNiv[ uiMemPosCurseur ],
-                &tmpVectNiv[ uiMemPosCurseur + NBR_TUILE_ECRAN_X ],
+                &tmpVectNiv[ uiMemPosCurseur + NBR_TUILE_TILE_MAPPING_X ],
                 &mVectChar[ uiPositionVectEcran ] );
-        uiPositionVectEcran += NBR_TUILE_ECRAN_X;
+        uiPositionVectEcran += NBR_TUILE_TILE_MAPPING_X;
 
     }
 

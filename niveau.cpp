@@ -25,7 +25,7 @@ bool Niveau::bInitialiserNiveau( unsigned int &uiChoixNiveau ){
     unsigned int uiMemTile, uiLongueurTab, uiLargeurTab;
 
     //resize du tableauEcran
-    mTabEcran.resize( NBR_TUILE_ECRAN_X, NBR_TUILE_ECRAN_Y );
+    mTabEcran.resize( NBR_TUILE_TILE_MAPPING_X, NBR_TUILE_TILE_MAPPING_Y );
 
     switch( uiChoixNiveau ){
         case 0:

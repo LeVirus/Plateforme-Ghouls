@@ -38,11 +38,11 @@ void MoteurGraphique::initialiserVertexArray(){
 
     //détermination du type du tableau de vertex
     mVertArrayTileMap.setPrimitiveType ( sf::Quads );
-    mVertArrayTileMap.resize ( NBR_TUILE_ECRAN_X * NBR_TUILE_ECRAN_Y * 4 );
+    mVertArrayTileMap.resize ( NBR_TUILE_TILE_MAPPING_X * NBR_TUILE_TILE_MAPPING_Y * 4 );
 
     //traitement de toutes les autres cases
-    for( unsigned int i = 0 ; i < NBR_TUILE_ECRAN_X * NBR_TUILE_ECRAN_Y * 4 ; i += 4 ){
-        if( uiPosCaseX == NBR_TUILE_ECRAN_X ){
+    for( unsigned int i = 0 ; i < NBR_TUILE_TILE_MAPPING_X * NBR_TUILE_TILE_MAPPING_Y * 4 ; i += 4 ){
+        if( uiPosCaseX == NBR_TUILE_TILE_MAPPING_X ){
             uiPosCaseX = 0;
             uiPosCaseY++;
         }
@@ -98,7 +98,7 @@ bool MoteurGraphique::bDessinerVertArrayNiveau( const Tableau2D &tabNivEcran ){
     unsigned int uiCoordBlockX, uiCoordBlockY, uiCoordTabX = 0, uiCoordTabY = 0;
     for( unsigned int i = 0; i < mVertArrayTileMap.getVertexCount() ; i+=4 ){
 
-        if( uiCoordTabX == NBR_TUILE_ECRAN_X ){
+        if( uiCoordTabX == NBR_TUILE_TILE_MAPPING_X ){
             uiCoordTabY++;
             uiCoordTabX = 0;
         }
@@ -177,7 +177,7 @@ std::pair< float, float > MoteurGraphique::pairGetPosEcran(){
 void MoteurGraphique::deplacerEcran( unsigned char direction,
                                      float nombrePixelDeplacement ){
 
-    std::pair< float, float > pairPosEcranTmp = pairGetPosEcran();
+    //std::pair< float, float > pairPosEcranTmp = pairGetPosEcran();
     float fMoveX = 0, fMoveY = 0;
 
     switch( direction ){//a modifier insérer les opérations logiques

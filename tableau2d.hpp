@@ -17,7 +17,7 @@ class Tableau2D{
     public:
         Tableau2D();
         Tableau2D( const unsigned int &longueur,
-                const unsigned int &largeur );
+                   const unsigned int &largeur );
 
          std::pair< unsigned int, unsigned int > getCoordCase( const float &fPositionEcranX, const float &fPositionEcranY,
                                                                const unsigned int &uiCaseDebutNivX,const unsigned int &uiCaseDebutNivY );
