@@ -65,6 +65,7 @@ void Moteur::lancer(){
 void Moteur::synchroniserEcranNiveau(
         std::pair< float, float > &pairPosEcranHG,
         std::pair< float, float > &pairPosEcranBD ){
+
     mPtrMemJeu->synchroniserEcranNiveau(
                 pairPosEcranHG , pairPosEcranBD );
 

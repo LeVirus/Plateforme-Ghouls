@@ -37,7 +37,7 @@ bool Tableau2D::bAttribuerTab( const std::vector< unsigned char > &vect, unsigne
     if( uiLongueurTab * uiLargeurTab != vect.size() )
         return false;
     resize( uiLongueurTab, uiLargeurTab );
-    std::copy ( &vect[ 0 ], &vect[ vect.size() - 1 ], &mVectChar[ 0 ] );
+    std::copy ( &vect[ 0 ], &vect[ vect.size() ], &mVectChar[ 0 ] );
     return true;
 }
 
@@ -94,20 +94,14 @@ bool Tableau2D::bRecupPortionTab(
 
     std::vector< unsigned char > tmpVectNiv;
     unsigned int uiPositionVectEcran = 0,
-                             uiMemCaseBasDroiteX = uiCaseHautGaucheX +
-                                 ( NBR_TUILE_TILE_MAPPING_X - 1 ),
-                             uiMemCaseBasDroiteY = uiCaseHautGaucheY +
-                                 ( NBR_TUILE_TILE_MAPPING_Y - 1 ),
-                             uiTmpLongueurNiveau;
+                             uiMemCaseBasDroiteX = uiCaseHautGaucheX + NBR_TUILE_TILE_MAPPING_X ,
+                             uiMemCaseBasDroiteY = uiCaseHautGaucheY + NBR_TUILE_TILE_MAPPING_Y ,
+                             uiTmpLongueurNiveau, uiLongueurTabACopierX, uiLongueurTabACopierY;
 
-    /*std::cerr<<" var  bRecupPortion "<<uiCaseHautGaucheX<<"  "<<uiCaseHautGaucheY
-        <<"  "<<uiMemCaseBasDroiteX<<"  "<<uiMemCaseBasDroiteY<<
-        "  "<<muiLongueurTab<<"  "<<muiLargeurTab<<
-        std::endl;*/
-    //verif des case haut-gauche et bas-droite du rectangle
+    //verif des case haut-gauche et bas-droite - 1 du rectangle
+    //traitement des cas dernieres case BAS et DROITE
     if( ( HORS_TAB == tab.getValAt( uiCaseHautGaucheX, uiCaseHautGaucheY ) ) ||
-            ( HORS_TAB == tab.getValAt( uiMemCaseBasDroiteX,
-                                                            uiMemCaseBasDroiteY ) ) ){
+            ( HORS_TAB == tab.getValAt( uiMemCaseBasDroiteX - 1, uiMemCaseBasDroiteY - 1 ) ) ){
         std::cerr<<"Erreur bRecupPortionTab. coordonnées non valide   "<<uiCaseHautGaucheX<<"  "<<uiCaseHautGaucheY
             <<"  "<<uiMemCaseBasDroiteX<<"  "<<uiMemCaseBasDroiteY<<
             "  "<<muiLongueurTab<<"  "<<muiLargeurTab<<
@@ -119,17 +113,31 @@ bool Tableau2D::bRecupPortionTab(
     //recup de la longueur et de la largeur du tableau de niveau
     uiTmpLongueurNiveau = tab.getLongueur();
 
-    for( unsigned int i = uiCaseHautGaucheY ; i < uiCaseHautGaucheY +
-            NBR_TUILE_ECRAN_Y ; ++i ){
+
+    //verification si la caméra est tout en BAS du niveau
+    if( HORS_TAB == tab.getValAt( uiMemCaseBasDroiteX - 1, uiMemCaseBasDroiteY ) ){
+        uiLongueurTabACopierY = NBR_TUILE_TILE_MAPPING_Y - 1;
+    }
+    else{
+       uiLongueurTabACopierY = NBR_TUILE_TILE_MAPPING_Y;
+    }
+
+    //verification si la caméra est tout à DROITE du niveau
+    if( HORS_TAB == tab.getValAt( uiMemCaseBasDroiteX, uiMemCaseBasDroiteY - 1 ) ){
+        uiLongueurTabACopierX = NBR_TUILE_TILE_MAPPING_X - 1;
+    }
+    else{
+       uiLongueurTabACopierX = NBR_TUILE_TILE_MAPPING_X;
+    }
+
+    for( unsigned int i = uiCaseHautGaucheY ; i < uiCaseHautGaucheY + uiLongueurTabACopierY ; ++i ){
 
         //copie des portions de ligne du tableau du niveau vers
         //le tableau ecran
-        unsigned int uiMemPosCurseur =  i * uiTmpLongueurNiveau +
-        uiCaseHautGaucheX;
+        unsigned int uiMemPosCurseur =  i * uiTmpLongueurNiveau + uiCaseHautGaucheX;
 
-        std::copy ( &tmpVectNiv[ uiMemPosCurseur ],
-                &tmpVectNiv[ uiMemPosCurseur + NBR_TUILE_TILE_MAPPING_X ],
-                &mVectChar[ uiPositionVectEcran ] );
+        std::copy ( &tmpVectNiv[ uiMemPosCurseur ] ,&tmpVectNiv[ uiMemPosCurseur +
+                uiLongueurTabACopierX ], &mVectChar[ uiPositionVectEcran ] );
         uiPositionVectEcran += NBR_TUILE_TILE_MAPPING_X;
 
     }
@@ -200,7 +208,7 @@ std::pair< unsigned int, unsigned int > Tableau2D::getCoordCase( const float &fP
  */
 const unsigned char &Tableau2D::getValAt( const unsigned int &uiCaseX, const unsigned int &uiCaseY )const{
     if( uiCaseX > muiLongueurTab || uiCaseY > muiLargeurTab ){
-        std::cout<<"getValAt Tableau2D Hors tab  "<<uiCaseX<<"  "<<muiLongueurTab<<"  "<<uiCaseY<<"  "<<muiLargeurTab<<std::endl;
+        //std::cout<<"getValAt Tableau2D Hors tab  "<<uiCaseX<<"  "<<muiLongueurTab<<"  "<<uiCaseY<<"  "<<muiLargeurTab<<std::endl;
         return HORS_TAB;
     }
     //std::cout<< uiCaseX << "   " << uiCaseY <<std::endl;

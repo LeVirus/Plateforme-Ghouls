@@ -26,7 +26,6 @@ class Niveau{
                 std::pair< float, float > &pairPosEcranBD );
         void verifDebutNiveau();
         bool bInitialiserNiveau( unsigned int &uiChoixNiveau );
-        void afficherTab()const;
         void modifCaseDebutNiveau( const unsigned int &uiPosX, const unsigned int &uiPosY );
         ~Niveau();
 };

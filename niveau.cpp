@@ -133,9 +133,9 @@ void Niveau::synchroniserEcranNiveau(
 
     //calcul de la position maximale Droite de la caméra
     //AngleBD auquel on soustrait la taille de la caméra
-    int iDistanceX = ( mTabNiveau.getLongueur() - ( muiCaseDebutNiveauX + mTabEcran.getLongueur() ) ) * TAILLE_TUILE,
+    int iDistanceX = ( mTabNiveau.getLongueur() - ( muiCaseDebutNiveauX + NBR_TUILE_ECRAN_X/*mTabEcran.getLongueur()*/ ) ) * TAILLE_TUILE,
 
-    iDistanceY = ( mTabNiveau.getLargeur() - ( muiCaseDebutNiveauY + mTabEcran.getLargeur() ) ) * TAILLE_TUILE;
+    iDistanceY = ( mTabNiveau.getLargeur() - ( muiCaseDebutNiveauY + NBR_TUILE_ECRAN_Y/*mTabEcran.getLargeur()*/ ) ) * TAILLE_TUILE;
 
     //Ecrire limite angle Bas-Droite
     pairPosEcranBD.first = static_cast< float >( iDistanceX );
@@ -175,17 +175,6 @@ const Tableau2D &Niveau::retourTabEcran(
                 mPairRecept.second	) )
         std::cout<<"coordonnées tableau hors limite"<<std::endl;
     return mTabEcran;
-}
-
-/**
- * @brief Affichage en mode console du tableau de tuiles.
- * ainsi que des informations relatives au niveau.
- */
-void Niveau::afficherTab()const{
-    std::cout<<"Tab Niveau::"<<std::endl;
-    mTabNiveau.afficherTab();
-    std::cout<<"Tab Ecran::"<<std::endl;
-    mTabEcran.afficherTab();
 }
 
 /**

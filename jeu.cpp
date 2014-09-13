@@ -42,6 +42,7 @@ const Tableau2D &Jeu::recupTabEcran( const float &fPosEcranX, const float &fPosE
 void Jeu::synchroniserEcranNiveau(
         std::pair< float, float > &pairPosEcranHG,
         std::pair< float, float > &pairPosEcranBD ){
+
     mNiveau.synchroniserEcranNiveau(
             pairPosEcranHG , pairPosEcranBD );
 }

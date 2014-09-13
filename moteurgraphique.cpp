@@ -309,6 +309,7 @@ void MoteurGraphique::correctionDeplacementCamera(
  * pas dépasser.
  */
 void MoteurGraphique::synchroniserNiveau(){
+
     std::pair< float, float > pairTmpLimBD, pairTmpLimHG;
     mPtrMemMoteur->synchroniserEcranNiveau(
                 pairTmpLimHG, pairTmpLimBD );
