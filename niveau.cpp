@@ -164,9 +164,10 @@ void Niveau::synchroniserEcranNiveau(
 const Tableau2D &Niveau::retourTabEcran(
         const	float &fPositionEcranX, const float &fPositionEcranY ){
 
+    std::cout<<"crecupTab"<<std::endl;
+
     //recup de la case haut gauche
-    mPairRecept = mTabNiveau.getCoordCase( fPositionEcranX,
-            fPositionEcranY, muiCaseDebutNiveauX, muiCaseDebutNiveauY );
+    mPairRecept = mTabNiveau.getCoordCase( fPositionEcranX, fPositionEcranY, muiCaseDebutNiveauX, muiCaseDebutNiveauY );
     /*std::cout << mPairRecept.first << " retourTab  " <<
         mPairRecept.second << std::endl;*/
 
@@ -175,6 +176,16 @@ const Tableau2D &Niveau::retourTabEcran(
                 mPairRecept.second	) )
         std::cout<<"coordonnées tableau hors limite"<<std::endl;
     return mTabEcran;
+}
+
+/**
+ * @brief Fonction de transfert de la case de la position de l'écran ( coin Haut-Gauche ).
+ * @param fPositionEcranX l'abscisse de la position de l'écran
+ * @param fPositionEcranY l'ordonnée de la position de l'écran
+ * @return La référence constante des coordonnées de la case Haut-Gauche de l'écran
+ */
+const std::pair< unsigned int, unsigned int > &Niveau::pairUiRetourCaseCourrante( float fPositionEcranX,  float fPositionEcranY ){
+    return mTabNiveau.getCoordCase( fPositionEcranX, fPositionEcranY, muiCaseDebutNiveauX, muiCaseDebutNiveauY );
 }
 
 /**

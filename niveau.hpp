@@ -8,7 +8,7 @@
  * @class Niveau
  * @brief Classe contenant toutes les informations concernant un niveau.
  * A l'initialisation du niveau un fichier texte va être lu pour charger ce dernier.
- * Elle envoi quant on lui demande les donnees des éléments à afficher au moteur.
+ * Elle envoi quand on lui demande les donnees des éléments à afficher au moteur.
  */
 class Niveau{
     private:
@@ -27,6 +27,7 @@ class Niveau{
         void verifDebutNiveau();
         bool bInitialiserNiveau( unsigned int &uiChoixNiveau );
         void modifCaseDebutNiveau( const unsigned int &uiPosX, const unsigned int &uiPosY );
+        const std::pair< unsigned int, unsigned int > &pairUiRetourCaseCourrante( float fPositionEcranX,  float fPositionEcranY );
         ~Niveau();
 };
 

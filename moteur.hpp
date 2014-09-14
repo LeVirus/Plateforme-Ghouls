@@ -5,6 +5,7 @@ class Jeu;
 
 #include "moteurgraphique.hpp"
 #include "tableau2d.hpp"
+//#include "jeu.hpp"
 #include <utility>
 
 /**
@@ -19,11 +20,10 @@ class Moteur{
     public:
         Moteur();
         const Tableau2D &recupTabEcran( const float &fPosEcranX, const float &fPosEcranY );
-        void synchroniserEcranNiveau(
-                std::pair< float, float > &pairPosEcranHG ,
-                std::pair< float, float > &pairPosEcranBD );
+        void synchroniserEcranNiveau( std::pair< float, float > &pairPosEcranHG, std::pair< float, float > &pairPosEcranBD );
         void initialiserMoteur( Jeu *ptrJeu );
         void lancer();
+        const std::pair< unsigned int, unsigned int > &pairUiRetourCaseCourrante( float fPositionEcranX,  float fPositionEcranY );
         ~Moteur();
 };
 

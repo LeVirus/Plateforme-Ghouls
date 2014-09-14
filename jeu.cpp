@@ -48,6 +48,16 @@ void Jeu::synchroniserEcranNiveau(
 }
 
 /**
+ * @brief Fonction de transfert de la case de la position de l'écran ( coin Haut-Gauche ).
+ * @param fPositionEcranX l'abscisse de la position de l'écran
+ * @param fPositionEcranY l'ordonnée de la position de l'écran
+ * @return La référence constante des coordonnées de la case Haut-Gauche de l'écran
+ */
+const std::pair< unsigned int, unsigned int > &Jeu::pairUiRetourCaseCourrante( float fPositionEcranX,  float fPositionEcranY ){
+    return mNiveau.pairUiRetourCaseCourrante( fPositionEcranX, fPositionEcranY );
+}
+
+/**
  * @brief destructeur de la classe Jeu
  */
 Jeu::~Jeu(){

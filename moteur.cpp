@@ -1,6 +1,6 @@
 #include "moteur.hpp"
-#include "jeu.hpp"
 #include "constantes.hpp"
+#include "jeu.hpp"
 #include <SFML/Graphics.hpp>
 
 /**
@@ -62,9 +62,7 @@ void Moteur::lancer(){
  * @param pairPosEcranBD les coordonnées de MoteurGraphique
  * à modifier (angle Bas-Droite)
  */
-void Moteur::synchroniserEcranNiveau(
-        std::pair< float, float > &pairPosEcranHG,
-        std::pair< float, float > &pairPosEcranBD ){
+void Moteur::synchroniserEcranNiveau( std::pair< float, float > &pairPosEcranHG, std::pair< float, float > &pairPosEcranBD ){
 
     mPtrMemJeu->synchroniserEcranNiveau(
                 pairPosEcranHG , pairPosEcranBD );
@@ -77,6 +75,16 @@ void Moteur::synchroniserEcranNiveau(
  */
 const Tableau2D &Moteur::recupTabEcran( const float &fPosEcranX, const float &fPosEcranY ){
     return mPtrMemJeu->recupTabEcran( fPosEcranX, fPosEcranY );
+}
+
+/**
+ * @brief Fonction de transfert de la case de la position de l'écran ( coin Haut-Gauche ).
+ * @param fPositionEcranX l'abscisse de la position de l'écran
+ * @param fPositionEcranY l'ordonnée de la position de l'écran
+ * @return La référence constante des coordonnées de la case Haut-Gauche de l'écran
+ */
+const std::pair< unsigned int, unsigned int > &Moteur::pairUiRetourCaseCourrante( float fPositionEcranX,  float fPositionEcranY ){
+    return mPtrMemJeu->pairUiRetourCaseCourrante( fPositionEcranX, fPositionEcranY );
 }
 
 /**

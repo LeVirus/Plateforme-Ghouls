@@ -17,10 +17,9 @@ class Jeu{
     public:
         Jeu();
         const Tableau2D &recupTabEcran( const float &fPosEcranX, const float &fPosEcranY );
-        void synchroniserEcranNiveau(
-                std::pair< float, float > &pairPosEcranHG ,
-                std::pair< float, float > &pairPosEcranBD );
+        void synchroniserEcranNiveau( std::pair< float, float > &pairPosEcranHG, std::pair< float, float > &pairPosEcranBD );
         bool lancer();
+        const std::pair< unsigned int, unsigned int > &pairUiRetourCaseCourrante( float fPositionEcranX,  float fPositionEcranY );
         ~Jeu();
 };
 

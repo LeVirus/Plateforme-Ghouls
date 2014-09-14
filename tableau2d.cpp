@@ -154,8 +154,8 @@ bool Tableau2D::bRecupPortionTab(
  * @param uiCaseDebutNivY l'ordonnée de la case debut niveau
  * @return coordonnées de la case correspondante
  */
-std::pair< unsigned int, unsigned int > Tableau2D::getCoordCase( const float &fPositionEcranX, const float &fPositionEcranY,
-                                                                 const unsigned int &uiCaseDebutNivX, const unsigned int &uiCaseDebutNivY ){
+const std::pair< unsigned int, unsigned int > &Tableau2D::getCoordCase( float fPositionEcranX, float fPositionEcranY,
+                                                                        unsigned int uiCaseDebutNivX, unsigned int uiCaseDebutNivY ){
 
     //verif si la case debut niveau est bien dans le tableau
     /*if( HORS_TAB == getValAt( uiCaseDebutNivX, uiCaseDebutNivY ) ){

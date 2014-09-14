@@ -10,33 +10,33 @@
  * Est composé d'un vector unidimentionnel
  */
 class Tableau2D{
-    private:
-        std::vector< unsigned char > mVectChar;
-        std::pair< int, int > mPairCase;
-        unsigned int muiLongueurTab, muiLargeurTab;
-    public:
-        Tableau2D();
-        Tableau2D( const unsigned int &longueur,
-                   const unsigned int &largeur );
+private:
+    std::vector< unsigned char > mVectChar;
+    std::pair< unsigned int, unsigned int > mPairCase;
+    unsigned int muiLongueurTab, muiLargeurTab;
+public:
+    Tableau2D();
+    Tableau2D( const unsigned int &longueur,
+               const unsigned int &largeur );
 
-         std::pair< unsigned int, unsigned int > getCoordCase( const float &fPositionEcranX, const float &fPositionEcranY,
-                                                               const unsigned int &uiCaseDebutNivX,const unsigned int &uiCaseDebutNivY );
+    const std::pair< unsigned int, unsigned int > &getCoordCase( float fPositionEcranX, float fPositionEcranY,
+                                                           unsigned int uiCaseDebutNivX, unsigned int uiCaseDebutNivY );
 
-        bool bAttribuerTab( const std::vector< unsigned char > &vect, unsigned int uiLongueurTab, unsigned int uiLargeurTab );
+    bool bAttribuerTab( const std::vector< unsigned char > &vect, unsigned int uiLongueurTab, unsigned int uiLargeurTab );
 
-        const unsigned char &getValAt( const unsigned int &uiCaseX, const unsigned int &uiCaseY )const;
+    const unsigned char &getValAt( const unsigned int &uiCaseX, const unsigned int &uiCaseY )const;
 
-        bool bRecupPortionTab( const Tableau2D &tab, const unsigned int &uiCaseHautGaucheX, const unsigned int &uiCaseHautGaucheY );
+    bool bRecupPortionTab( const Tableau2D &tab, const unsigned int &uiCaseHautGaucheX, const unsigned int &uiCaseHautGaucheY );
 
-        const std::vector< unsigned char > &getTab()const;
-        void resize( const unsigned int &longueur, const unsigned int &largeur );
+    const std::vector< unsigned char > &getTab()const;
+    void resize( const unsigned int &longueur, const unsigned int &largeur );
 
-        inline const unsigned int &getLongueur()const{return muiLongueurTab;}
-        inline const unsigned int &getLargeur()const{return muiLargeurTab;}
-        inline unsigned int getTailleTotale()const{return muiLongueurTab * muiLargeurTab;}
+    inline unsigned int getLongueur()const{return muiLongueurTab;}
+    inline unsigned int getLargeur()const{return muiLargeurTab;}
+    inline unsigned int getTailleTotale()const{return muiLongueurTab * muiLargeurTab;}
 
-        void afficherTab()const;
-        ~Tableau2D();
+    void afficherTab()const;
+    ~Tableau2D();
 };
 
 #endif

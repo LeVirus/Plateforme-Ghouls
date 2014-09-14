@@ -27,6 +27,10 @@ void MoteurGraphique::initialiser( Moteur *ptrMoteur ){
     mFenetre.setView( mCamera );
     mFenetre.setFramerateLimit(60);
     initialiserVertexArray();
+
+    //mettre valeur position courrante hors du tableau
+    mPositionCourranteTableauNiveau.first = 100000;
+    mPositionCourranteTableauNiveau.second = 100000;
 }
 
 /**
@@ -102,20 +106,23 @@ void MoteurGraphique::deplacerVertArrayEcran( float fPosX, float fPosY ){
  * Récupération du tableau de l'écran courrant.
  */
 void MoteurGraphique::raffraichirEcran(){
-    bool erreur = false;
+    bool erreur = false, bTableauIdentique;
     std::pair< float, float > pairCoordEcran = pairGetPosEcran();
+    bTableauIdentique = bVerifTableauSimilaire( pairCoordEcran.first, pairCoordEcran.second );
     //std::cerr << pairCoordEcran.first << "coors ecran" << pairCoordEcran.second << std::endl;
 
     if( mPtrMemMoteur ){
-        //recup du tableau de Niveau
-        const Tableau2D &tabEcran = mPtrMemMoteur->recupTabEcran( pairCoordEcran.first, pairCoordEcran.second );
-        //tabEcran.afficherTab();//affichage console
+        //si la position actuelle est la même que la position précédente on garde le même tableau
+        if( ! bTableauIdentique ){
+            //recup du tableau de Niveau
+            const Tableau2D &tabEcran = mPtrMemMoteur->recupTabEcran( pairCoordEcran.first, pairCoordEcran.second );
+            //tabEcran.afficherTab();//affichage console
 
-        if( ! bDessinerVertArrayNiveau( tabEcran ) ){
-            std::cerr<<"Erreur bDessinerVertArrayNiveau"<<std::endl;
-            erreur = true;
+            if( ! bDessinerVertArrayNiveau( tabEcran ) ){
+                std::cerr<<"Erreur bDessinerVertArrayNiveau"<<std::endl;
+                erreur = true;
+            }
         }
-
         if( ! erreur ){
             mFenetre.clear( sf::Color::Black );
             mFenetre.setView( mCamera );
@@ -219,30 +226,38 @@ std::pair< float, float > MoteurGraphique::pairGetPosEcran(){
 void MoteurGraphique::deplacerEcran( unsigned char direction,
                                      float nombrePixelDeplacement ){
 
-    //std::pair< float, float > pairPosEcranTmp = pairGetPosEcran();
     float fMoveX = 0, fMoveY = 0;
 
-    switch( direction ){//a modifier insérer les opérations logiques
-    case HAUT:
-        //si position ecran actuelle == la limite du niveau( coordonnées que la caméra ne doit pas dépacer )
-        //if( ! ( mPairLimiteDeplacementEcranHG.second - pairPosEcranTmp.second ) < 0.1 )
-            fMoveY = -1 * nombrePixelDeplacement;
-        break;
-    case DROITE:
-        //if( ! ( mPairLimiteDeplacementEcranBD.first - pairPosEcranTmp.first ) < 0.1 )
+    //si position ecran actuelle == la limite du niveau( coordonnées que la caméra ne doit pas dépacer )
+    if( direction & HAUT )
+        fMoveY = -1 * nombrePixelDeplacement;
+
+    if( direction & DROITE )
         fMoveX = nombrePixelDeplacement;
-        break;
-    case GAUCHE:
-        //if( ! ( mPairLimiteDeplacementEcranHG.first - pairPosEcranTmp.first ) < 0.1 )
+
+    if( direction & GAUCHE )
         fMoveX = -1 * nombrePixelDeplacement;
-        break;
-    case BAS:
-        //if( !  ( mPairLimiteDeplacementEcranHG.second - pairPosEcranTmp.second ) < 0.1 )
+
+    if( direction & BAS )
         fMoveY = nombrePixelDeplacement;
-        break;
-    }
+
     correctionDeplacementCamera( fMoveX, fMoveY );
     mCamera.move( fMoveX, fMoveY );
+}
+
+/**
+* @brief Fonction de vérification de similitude entre la case Haut-Gauche(caméra) courrante et en mémoire.
+* @param fPositionEcranX l'abscisse de la position de l'écran
+* @param fPositionEcranY l'ordonnée de la position de l'écran
+* @return true si la position est la même false sinon.
+*/
+bool MoteurGraphique::bVerifTableauSimilaire( float fPositionEcranX, float fPositionEcranY ){
+    std::pair< unsigned int, unsigned int > pairUiTmpPosEcran = mPtrMemMoteur->pairUiRetourCaseCourrante( fPositionEcranX, fPositionEcranY );
+    bool bRetour = pairUiTmpPosEcran == mPositionCourranteTableauNiveau;
+    if( ! bRetour ){//si position non identique
+        mPositionCourranteTableauNiveau = pairUiTmpPosEcran;
+    }
+    return bRetour;
 }
 
 /**
