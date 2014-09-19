@@ -122,12 +122,15 @@ void MoteurGraphique::raffraichirEcran(){
                 std::cerr<<"Erreur bDessinerVertArrayNiveau"<<std::endl;
                 erreur = true;
             }
+            else{
+                positionnerTileMappingEcran();
+            }
         }
         if( ! erreur ){
             mFenetre.clear( sf::Color::Black );
             mFenetre.setView( mCamera );
 
-            positionnerTileMappingEcran();
+            //positionnerTileMappingEcran();
             mFenetre.draw( mVertArrayTileMap, &textureA );
             mFenetre.display();
         }
