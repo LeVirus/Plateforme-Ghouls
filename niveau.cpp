@@ -30,7 +30,7 @@ bool Niveau::bInitialiserNiveau( unsigned int &uiChoixNiveau ){
     switch( uiChoixNiveau ){
         case 0:
         //dans Qtcreator le chemin pars de l'executable
-            strMemChemin = "../Plateforme/Ressources/niveau0.txt";
+            strMemChemin = "../Plateforme-Ghouls/Ressources/niveau0.txt";
             break;
         default:
             return false;

@@ -2,7 +2,10 @@
 #include "moteur.hpp"
 #include "tableau2d.hpp"
 #include "constantes.hpp"
+#include "displaysystem.hpp"
+#include "ECSconstantes.hpp"
 #include <iostream>
+#include <map>
 
 /**
  * @brief Constructeur de la classe MoteurGraphique
@@ -132,6 +135,9 @@ void MoteurGraphique::raffraichirEcran(){
 
             //positionnerTileMappingEcran();
             mFenetre.draw( mVertArrayTileMap, &textureA );
+            const std::map< DisplayComponent *, PositionComponent * > & MapContainerSprite = mPtrMemMoteur -> getECSEngine() .
+                    getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> getMapComponentDisplaySystem() ;
+
             mFenetre.display();
         }
     }
@@ -334,7 +340,7 @@ void MoteurGraphique::synchroniserNiveau(){
 
     mPairLimiteDeplacementEcranHG = pairTmpLimHG;
     mPairLimiteDeplacementEcranBD = pairTmpLimBD;
-    if( ! textureA.loadFromFile("../Plateforme/Ressources/DK.png"))
+    if( ! textureA.loadFromFile("../Plateforme-Ghouls/Ressources/DK.png"))
         std::cerr << "erreur synchroniserNiveau, chargement texture " << std::endl;
 }
 

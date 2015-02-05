@@ -3,6 +3,10 @@
 #include "jeu.hpp"
 #include <SFML/Graphics.hpp>
 
+#include "positioncomponent.hpp"
+#include "displaycomponent.hpp"
+#include "displaysystem.hpp"
+
 /**
  * @brief Constructeur de la classe moteur
  */
@@ -19,6 +23,15 @@ void Moteur::initialiserMoteur( Jeu *ptrJeu ){
     if( ptrJeu )
         mPtrMemJeu = ptrJeu;
     mMoteurG.initialiser( this );
+}
+
+/**
+ * @brief Moteur::getECSEngine
+ * Renvoie une référence vers Engine (ECS).
+ * @return Une référence vers Engine.
+ */
+Engine & Moteur::getECSEngine(){
+    return mEngine;
 }
 
 /**
@@ -52,6 +65,44 @@ void Moteur::lancer(){
             mMoteurG.raffraichirEcran();
         }
     }while( true );
+}
+
+/**
+ * @brief Moteur::chargerEntitesTest
+ * Chargement d'entité par défaut pour le test.
+ */
+void Moteur::chargerEntitesTest(){
+    Engine engine;
+    ComponentManager & compMan = engine.getComponentManager();
+    engine.AddEntity();
+    engine.AddEntity();
+    engine.bAddComponentToEntity( 1, DISPLAY_COMPONENT );
+    engine.bAddComponentToEntity( 1, POSITION_COMPONENT );
+    engine.bAddComponentToEntity( 2, DISPLAY_COMPONENT );
+    engine.bAddComponentToEntity( 2, POSITION_COMPONENT );
+    engine.getSystemManager().bAddSystem( DISPLAY_SYSTEM ); // std::cout << "sdf" << std::endl;
+    compMan . updateComponentFromEntity();
+    PositionComponent * posComp = compMan . searchComponentByType< PositionComponent >( 1, POSITION_COMPONENT );
+    if( posComp ){
+        posComp -> mfPositionX = 100;
+        posComp -> mfPositionY = 158;
+    }
+    PositionComponent * posComp2 = compMan . searchComponentByType< PositionComponent >( 2, POSITION_COMPONENT );
+    if( posComp2 ){
+        posComp2 -> mfPositionX = 10;
+        posComp2 -> mfPositionY = 298;
+    }
+    DisplayComponent * dispComp = compMan . searchComponentByType< DisplayComponent >( 1, DISPLAY_COMPONENT );
+    if( dispComp ){
+        dispComp -> muiNumSprite = 3;
+    }
+    DisplayComponent * dispComp2 = compMan . searchComponentByType< DisplayComponent >( 2, DISPLAY_COMPONENT );
+    if( dispComp2 ){
+        dispComp2 -> muiNumSprite = 8;
+    }
+
+    engine.execIteration();
+
 }
 
 /**

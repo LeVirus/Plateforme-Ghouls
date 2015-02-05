@@ -3,9 +3,11 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-LIBS += -lsfml-graphics -lsfml-window -lsfml-system
+INCLUDEPATH += ../LibECS/Header/
 
-QMAKE_CXXFLAGS *= -Wall -Wextra -pedantic -g
+LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lECS -L../LibECS/
+
+QMAKE_CXXFLAGS *= -Wall -Wextra -pedantic -g -std=c++14
 
 SOURCES += main.cpp \
     jeu.cpp \
