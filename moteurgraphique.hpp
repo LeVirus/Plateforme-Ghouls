@@ -6,6 +6,7 @@ class Tableau2D;
 
 #include <SFML/Graphics.hpp>
 #include <utility>
+#include <memory>
 
 /**
  * @class MoteurGraphique
@@ -14,7 +15,8 @@ class Tableau2D;
 class MoteurGraphique{
     private:
         sf::RenderWindow mFenetre;
-        sf::Texture textureA;
+        sf::Texture textureA, textureNiveau;
+        std::vector< std::unique_ptr< sf::Sprite > > mVectSprite;
         sf::View mCamera;
         sf::VertexArray mVertArrayTileMap;
         Moteur *mPtrMemMoteur;
@@ -27,10 +29,12 @@ class MoteurGraphique{
         std::pair< float, float > pairGetPosEcran();
         void initialiserVertexArray();
         void initialiser( Moteur *ptrMoteur );
+        void initialiserNiveau( unsigned int uiNumNiveau );
         void raffraichirEcran();
         void correctionDeplacementCamera( float &fMoveX, float &fMoveY );
         void deplacerEcran( unsigned char direction, float nombrePixelDeplacement = 5 );
         void positionnerTileMappingEcran();
+        void dessinerSpriteECS();
         void deplacerVertArrayEcran( float fPosX, float fPosY );
         bool bDessinerVertArrayNiveau( const Tableau2D &tabNivEcran );
         bool bAfficherTuileEcran( const Tableau2D &tabNivEcran );

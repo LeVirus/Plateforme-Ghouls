@@ -3,6 +3,8 @@
 #include "tableau2d.hpp"
 #include "constantes.hpp"
 #include "displaysystem.hpp"
+#include "displaycomponent.hpp"
+#include "positioncomponent.hpp"
 #include "ECSconstantes.hpp"
 #include <iostream>
 #include <map>
@@ -35,6 +37,29 @@ void MoteurGraphique::initialiser( Moteur *ptrMoteur ){
     mPositionCourranteTableauNiveau.first = 100000;
     mPositionCourranteTableauNiveau.second = 100000;
 }
+
+/**
+ * @brief MoteurGraphique::initialiserNiveau
+ * Fonction de chargement des textures et des sprites associés au niveau, dont le numéro est envoyé en paramètre.
+ * @param uiNumNiveau le numéro du niveau
+ */
+void MoteurGraphique::initialiserNiveau( unsigned int uiNumNiveau ){
+    switch( uiNumNiveau ){
+    case 0:
+        if(  !textureNiveau.loadFromFile("../Ressources/gG.jpg")  ) std::cout << "fail load niveau text\n";
+        mVectSprite .push_back( std::make_unique< sf::Sprite >() );
+        mVectSprite[ 0 ] -> setTexture( textureNiveau );
+        mVectSprite[ 0 ] -> setTextureRect( sf::IntRect(0, 0, 100, 100) );// valeur au hasard
+
+        mVectSprite .push_back( std::make_unique< sf::Sprite >() );
+        mVectSprite[ 1 ] -> setTexture( textureNiveau );
+        mVectSprite[ 1 ] -> setTextureRect( sf::IntRect(10, 270, 100, 100) );// valeur au hasard
+        break;
+    default:
+        break;
+    }
+}
+
 
 /**
  * @brief Fonction de configuration du tableau de Vertex destiné à afficher le TileMApping
@@ -135,11 +160,32 @@ void MoteurGraphique::raffraichirEcran(){
 
             //positionnerTileMappingEcran();
             mFenetre.draw( mVertArrayTileMap, &textureA );
-            const std::map< DisplayComponent *, PositionComponent * > & MapContainerSprite = mPtrMemMoteur -> getECSEngine() .
-                    getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> getMapComponentDisplaySystem() ;
+            dessinerSpriteECS();
 
             mFenetre.display();
         }
+    }
+}
+
+/**
+ * @brief MoteurGraphique::dessinerSpriteDisplaySystem
+ * La fonction récupère les données concernant l'affichage des éléments de DisplaySystem(ECS).
+ * A l'aide de ces données les sprites correspondants sont affichés.
+ */
+void MoteurGraphique::dessinerSpriteECS(){
+    //récupération du conteneur de composants nécéssaires a l'affichage
+    const std::map< DisplayComponent *, PositionComponent * > & MapContainerSprite = mPtrMemMoteur -> getECSEngine() .
+            getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> getMapComponentDisplaySystem() ;
+     mPtrMemMoteur -> getECSEngine() .
+                getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) ->displaySystem();
+    std::cout << MapContainerSprite .size() << "\n";
+
+    for( std::map< DisplayComponent *, PositionComponent * >::const_iterator it = MapContainerSprite.begin() ; it != MapContainerSprite.end() ; it++ ){
+        //ce fonctionnement est temporaire
+        DisplayComponent *ptrDisplayComp = ( *it) . first;
+        PositionComponent *ptrPositionComp = ( *it) . second;
+        std::cout << ptrDisplayComp -> muiNumSprite << "\n";
+        std::cout << ptrPositionComp -> mfPositionX << "Y  " << ptrPositionComp -> mfPositionY <<"\n";
     }
 }
 
