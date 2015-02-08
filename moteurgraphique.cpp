@@ -13,7 +13,7 @@
  * @brief Constructeur de la classe MoteurGraphique
  */
 MoteurGraphique::MoteurGraphique(){
-
+initialiserNiveau( 0 );//TMP
 }
 
 
@@ -46,14 +46,14 @@ void MoteurGraphique::initialiser( Moteur *ptrMoteur ){
 void MoteurGraphique::initialiserNiveau( unsigned int uiNumNiveau ){
     switch( uiNumNiveau ){
     case 0:
-        if(  !textureNiveau.loadFromFile("../Ressources/gG.jpg")  ) std::cout << "fail load niveau text\n";
+        if(  !textureNiveau.loadFromFile("../Plateforme-Ghouls/Ressources/gG.jpg")  ) std::cout << "fail load niveau text\n";
         mVectSprite .push_back( std::make_unique< sf::Sprite >() );
         mVectSprite[ 0 ] -> setTexture( textureNiveau );
-        mVectSprite[ 0 ] -> setTextureRect( sf::IntRect(0, 0, 100, 100) );// valeur au hasard
+        mVectSprite[ 0 ] -> setTextureRect( sf::IntRect(0, 0, 150, 100) );// valeur au hasard
 
         mVectSprite .push_back( std::make_unique< sf::Sprite >() );
         mVectSprite[ 1 ] -> setTexture( textureNiveau );
-        mVectSprite[ 1 ] -> setTextureRect( sf::IntRect(10, 270, 100, 100) );// valeur au hasard
+        mVectSprite[ 1 ] -> setTextureRect( sf::IntRect(10, 270, 80, 120) );// valeur au hasard
         break;
     default:
         break;
@@ -176,16 +176,29 @@ void MoteurGraphique::dessinerSpriteECS(){
     //récupération du conteneur de composants nécéssaires a l'affichage
     const std::map< DisplayComponent *, PositionComponent * > & MapContainerSprite = mPtrMemMoteur -> getECSEngine() .
             getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> getMapComponentDisplaySystem() ;
-     mPtrMemMoteur -> getECSEngine() .
-                getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) ->displaySystem();
-    std::cout << MapContainerSprite .size() << "\n";
+
+        //std::cout << MapContainerSprite .size() << "\n";
 
     for( std::map< DisplayComponent *, PositionComponent * >::const_iterator it = MapContainerSprite.begin() ; it != MapContainerSprite.end() ; it++ ){
         //ce fonctionnement est temporaire
         DisplayComponent *ptrDisplayComp = ( *it) . first;
         PositionComponent *ptrPositionComp = ( *it) . second;
-        std::cout << ptrDisplayComp -> muiNumSprite << "\n";
-        std::cout << ptrPositionComp -> mfPositionX << "Y  " << ptrPositionComp -> mfPositionY <<"\n";
+        //std::cout << ptrDisplayComp -> muiNumSprite << "Num Sprite\n";
+        //std::cout << ptrPositionComp -> mfPositionX << "Y  " << ptrPositionComp -> mfPositionY <<"\n";
+
+
+
+        if( mVectSprite .size() > ptrDisplayComp -> muiNumSprite
+                && mVectSprite[ ptrDisplayComp -> muiNumSprite ] ){
+            mVectSprite[ ptrDisplayComp -> muiNumSprite ] -> setPosition( ptrPositionComp -> mfPositionX, ptrPositionComp -> mfPositionY );
+
+            mFenetre . draw( *mVectSprite[ ptrDisplayComp -> muiNumSprite ] );
+        }
+        else {//TEST
+            mVectSprite[ 1 ] -> setPosition( ptrPositionComp -> mfPositionX, ptrPositionComp -> mfPositionY );
+
+            mFenetre . draw( *mVectSprite[ 1 ] );
+        }
     }
 }
 

@@ -31,7 +31,7 @@ void Moteur::initialiserMoteur( Jeu *ptrJeu ){
  * @return Une référence vers Engine.
  */
 Engine & Moteur::getECSEngine(){
-    return mEngine;
+    return mECSEngine;
 }
 
 /**
@@ -62,6 +62,7 @@ void Moteur::lancer(){
                 cDirection += GAUCHE;
 
             if( cDirection != 0 )mMoteurG.deplacerEcran( cDirection );
+
             mMoteurG.raffraichirEcran();
         }
     }while( true );
@@ -72,16 +73,20 @@ void Moteur::lancer(){
  * Chargement d'entité par défaut pour le test.
  */
 void Moteur::chargerEntitesTest(){
-    Engine engine;
-    ComponentManager & compMan = engine.getComponentManager();
-    engine.AddEntity();
-    engine.AddEntity();
-    engine.bAddComponentToEntity( 1, DISPLAY_COMPONENT );
-    engine.bAddComponentToEntity( 1, POSITION_COMPONENT );
-    engine.bAddComponentToEntity( 2, DISPLAY_COMPONENT );
-    engine.bAddComponentToEntity( 2, POSITION_COMPONENT );
-    engine.getSystemManager().bAddSystem( DISPLAY_SYSTEM ); // std::cout << "sdf" << std::endl;
+    ComponentManager & compMan = mECSEngine.getComponentManager();
+    mECSEngine.AddEntity();
+    mECSEngine.AddEntity();
+    mECSEngine.bAddComponentToEntity( 0, DISPLAY_COMPONENT );
+    mECSEngine.bAddComponentToEntity( 0, POSITION_COMPONENT );
+    mECSEngine.bAddComponentToEntity( 1, DISPLAY_COMPONENT );
+    mECSEngine.bAddComponentToEntity( 1, POSITION_COMPONENT );
+    if( ! mECSEngine.getSystemManager().bAddSystem( DISPLAY_SYSTEM ) ) std::cout << "Echec DisplaySystem non ajouté\n" ;
+
     compMan . updateComponentFromEntity();
+
+
+    //mECSEngine . getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> refreshEntity();
+
     PositionComponent * posComp = compMan . searchComponentByType< PositionComponent >( 1, POSITION_COMPONENT );
     if( posComp ){
         posComp -> mfPositionX = 100;
@@ -94,14 +99,14 @@ void Moteur::chargerEntitesTest(){
     }
     DisplayComponent * dispComp = compMan . searchComponentByType< DisplayComponent >( 1, DISPLAY_COMPONENT );
     if( dispComp ){
-        dispComp -> muiNumSprite = 3;
+        dispComp -> muiNumSprite = 0;
     }
     DisplayComponent * dispComp2 = compMan . searchComponentByType< DisplayComponent >( 2, DISPLAY_COMPONENT );
     if( dispComp2 ){
-        dispComp2 -> muiNumSprite = 8;
+        dispComp2 -> muiNumSprite = 1;
     }
 
-    engine.execIteration();
+    mECSEngine.execIteration();
 
 }
 

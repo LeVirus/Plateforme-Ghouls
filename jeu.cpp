@@ -18,7 +18,10 @@ bool Jeu::lancer(){
         return false;
     mNiveau.verifDebutNiveau();
 //mNiveau.afficherNivEcran();
-    mMoteurPrincipal.lancer();
+
+    mMoteurPrincipal . chargerEntitesTest();
+
+    mMoteurPrincipal . lancer();
     return true;
 }
 
