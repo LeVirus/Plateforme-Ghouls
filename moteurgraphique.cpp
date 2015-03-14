@@ -174,7 +174,7 @@ void MoteurGraphique::raffraichirEcran(){
  */
 void MoteurGraphique::dessinerSpriteECS(){
     //récupération du conteneur de composants nécéssaires a l'affichage
-    const std::map< DisplayComponent *, PositionComponent * > & MapContainerSprite = mPtrMemMoteur -> getECSEngine() .
+    const std::multimap< DisplayComponent *, PositionComponent * > & MapContainerSprite = mPtrMemMoteur -> getECSEngine() .
             getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> getMapComponentDisplaySystem() ;
 
         //std::cout << MapContainerSprite .size() << "\n";

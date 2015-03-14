@@ -2,10 +2,16 @@
 #include "constantes.hpp"
 #include "jeu.hpp"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 #include "positioncomponent.hpp"
+#include "inputcomponent.hpp"
 #include "displaycomponent.hpp"
+#include "behaviorcomponent.hpp"
+#include "moveablecomponent.hpp"
 #include "displaysystem.hpp"
+#include "inputsystem.hpp"
+#include "iasystem.hpp"
 
 /**
  * @brief Constructeur de la classe moteur
@@ -41,6 +47,9 @@ Engine & Moteur::getECSEngine(){
 void Moteur::lancer(){
     unsigned char cDirection, ucTmpCmpt = 0;
     mMoteurG.synchroniserNiveau();
+
+    InputComponent * inputComp = mECSEngine . getComponentManager() . searchComponentByType< InputComponent >( 1, INPUT_COMPONENT );
+    if( ! inputComp ) std::cout << "erreur inputComp NULL\n";
     do{
 
         ucTmpCmpt++;
@@ -51,20 +60,38 @@ void Moteur::lancer(){
             if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Escape ) )break;
 
             //si haut est presse OU bas
-            if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) )
+            if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) ){
                 cDirection += HAUT;
-            else if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) )
+                if( inputComp ){
+                    inputComp -> mBitsetInput[ MOVE_UP ] = true;
+                }
+            }
+            else if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) ){
                 cDirection += BAS;
+                if( inputComp ){
+                    inputComp -> mBitsetInput[ MOVE_DOWN ] = true;
+                }
+            }
             //si droite est presse OU gauche
-            if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) )
+            if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) ){
                 cDirection += DROITE;
-            else if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) )
+                if( inputComp ){
+                    inputComp -> mBitsetInput[ MOVE_RIGHT ] = true;
+                }
+            }
+            else if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) ){
                 cDirection += GAUCHE;
+                if( inputComp ){
+                    inputComp -> mBitsetInput[ MOVE_LEFT ] = true;
+                }
+            }
 
             if( cDirection != 0 )mMoteurG.deplacerEcran( cDirection );
 
+            mECSEngine .execIteration();
             mMoteurG.raffraichirEcran();
         }
+
     }while( true );
 }
 
@@ -78,33 +105,73 @@ void Moteur::chargerEntitesTest(){
     mECSEngine.AddEntity();
     mECSEngine.bAddComponentToEntity( 0, DISPLAY_COMPONENT );
     mECSEngine.bAddComponentToEntity( 0, POSITION_COMPONENT );
+    mECSEngine.bAddComponentToEntity( 0, BEHAVIOR_COMPONENT );
+    mECSEngine.bAddComponentToEntity( 0, MOVEABLE_COMPONENT );
+
     mECSEngine.bAddComponentToEntity( 1, DISPLAY_COMPONENT );
     mECSEngine.bAddComponentToEntity( 1, POSITION_COMPONENT );
-    if( ! mECSEngine.getSystemManager().bAddSystem( DISPLAY_SYSTEM ) ) std::cout << "Echec DisplaySystem non ajouté\n" ;
+    mECSEngine.bAddComponentToEntity( 1, MOVEABLE_COMPONENT );
+    mECSEngine.bAddComponentToEntity( 1, INPUT_COMPONENT );
 
+    if( ! mECSEngine.getSystemManager().bAddSystem( DISPLAY_SYSTEM ) ) std::cout << "Echec DisplaySystem non ajouté\n" ;
+    if( ! mECSEngine.getSystemManager().bAddSystem( IA_SYSTEM ) ) std::cout << "Echec BehaviorSystem non ajouté\n" ;
+    if( ! mECSEngine.getSystemManager().bAddSystem( INPUT_SYSTEM ) ) std::cout << "Echec InputSystem non ajouté\n" ;
+    if( ! mECSEngine.getSystemManager().bAddSystem( GRAVITY_SYSTEM ) ) std::cout << "Echec InputSystem non ajouté\n" ;
+
+    //mECSEngine.displayVectEntity();
     compMan . updateComponentFromEntity();
 
 
     //mECSEngine . getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> refreshEntity();
+    //mECSEngine . getSystemManager() . searchSystemByType < IASystem > ( IA_SYSTEM ) -> refreshEntity();
 
-    PositionComponent * posComp = compMan . searchComponentByType< PositionComponent >( 1, POSITION_COMPONENT );
+
+    //ENTITE 0==========================================================
+    PositionComponent * posComp = compMan . searchComponentByType< PositionComponent >( 0, POSITION_COMPONENT );
     if( posComp ){
         posComp -> mfPositionX = 100;
-        posComp -> mfPositionY = 158;
+        posComp -> mfPositionY = 50;
     }
-    PositionComponent * posComp2 = compMan . searchComponentByType< PositionComponent >( 2, POSITION_COMPONENT );
-    if( posComp2 ){
-        posComp2 -> mfPositionX = 10;
-        posComp2 -> mfPositionY = 298;
-    }
-    DisplayComponent * dispComp = compMan . searchComponentByType< DisplayComponent >( 1, DISPLAY_COMPONENT );
+    DisplayComponent * dispComp = compMan . searchComponentByType< DisplayComponent >( 0, DISPLAY_COMPONENT );
     if( dispComp ){
         dispComp -> muiNumSprite = 0;
     }
-    DisplayComponent * dispComp2 = compMan . searchComponentByType< DisplayComponent >( 2, DISPLAY_COMPONENT );
-    if( dispComp2 ){
-        dispComp2 -> muiNumSprite = 1;
+    BehaviorComponent * behavComp = compMan . searchComponentByType< BehaviorComponent >( 0, BEHAVIOR_COMPONENT );
+    if( behavComp ){
+        //behavComp -> muiTypeBehavior = RING;
+        //behavComp -> muiTypeBehavior = SINUSOIDAL;
+        behavComp -> muiTypeBehavior = ROUND_TRIP;
     }
+
+    MoveableComponent * moveComp = compMan . searchComponentByType< MoveableComponent >( 0, MOVEABLE_COMPONENT );
+    if( moveComp ){
+        moveComp -> mfVelocite = 3;
+        moveComp -> mVectFCustumVar[ 0 ] = 200;
+        moveComp -> mVectFCustumVar[ 1 ] = 30;
+        //moveComp -> mbTerrestrial = false;
+    }
+
+    //ENTITE 1==========================================================
+    PositionComponent * posCompA = compMan . searchComponentByType< PositionComponent >( 1, POSITION_COMPONENT );
+    if( posCompA ){
+        posCompA -> mfPositionX = 0;
+        posCompA -> mfPositionY = 0;
+    }
+    DisplayComponent * dispCompA = compMan . searchComponentByType< DisplayComponent >( 1, DISPLAY_COMPONENT );
+    if( dispCompA ){
+        dispCompA -> muiNumSprite = 1;
+    }
+
+    MoveableComponent * moveCompA = compMan . searchComponentByType< MoveableComponent >( 1, MOVEABLE_COMPONENT );
+    if( moveCompA ){
+        moveCompA -> mfVelocite = 5;
+        moveCompA -> mbTerrestrial = true;
+    }
+
+    mECSEngine.getSystemManager().searchSystemByType< IASystem >( IA_SYSTEM ) ->  initMoveable( behavComp, posComp, moveComp );
+    //InputSystem * inputSystem = mECSEngine.getSystemManager().searchSystemByType< InputSystem >( INPUT_SYSTEM );
+
+
 
     mECSEngine.execIteration();
 
