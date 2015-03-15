@@ -14,7 +14,8 @@ SOURCES += main.cpp \
     moteur.cpp \
     moteurgraphique.cpp \
     niveau.cpp \
-    tableau2d.cpp
+    tableau2d.cpp \
+    moteurphysique.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -25,7 +26,8 @@ HEADERS += \
     moteurgraphique.hpp \
     niveau.hpp \
     tableau2d.hpp \
-    constantes.hpp
+    constantes.hpp \
+    moteurphysique.hpp
 
 OTHER_FILES += \
     Ressources/niveau0.txt

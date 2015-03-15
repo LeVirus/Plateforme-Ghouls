@@ -4,6 +4,7 @@
 class Jeu;
 
 #include "moteurgraphique.hpp"
+#include "moteurphysique.hpp"
 #include "tableau2d.hpp"
 #include "engine.hpp"
 //#include "jeu.hpp"
@@ -17,6 +18,7 @@ class Jeu;
 class Moteur{
     private:
         MoteurGraphique mMoteurG;
+        MoteurGraphique mMoteurPhysique;
         Jeu *mPtrMemJeu;
         Engine mECSEngine;
     public:
