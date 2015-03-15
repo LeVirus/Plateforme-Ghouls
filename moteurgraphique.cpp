@@ -13,7 +13,7 @@
  * @brief Constructeur de la classe MoteurGraphique
  */
 MoteurGraphique::MoteurGraphique(){
-initialiserNiveau( 0 );//TMP
+    initialiserNiveau( 0 );//TMP
 }
 
 

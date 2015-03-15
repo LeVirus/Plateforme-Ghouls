@@ -1,6 +1,8 @@
 #ifndef MOTEURPHYSIQUE_H
 #define MOTEURPHYSIQUE_H
 
+#include "gestionnairesol.hpp"
+
 class Moteur;
 
 /**
@@ -10,6 +12,7 @@ class Moteur;
 class MoteurPhysique{
 private:
     Moteur *mPtrMemMoteur;
+    GestionnaireSol mGestSol;
 public:
     MoteurPhysique();
     void initialiser( Moteur *ptrMoteur );

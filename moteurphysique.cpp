@@ -1,4 +1,5 @@
 #include "moteurphysique.hpp"
+#include <iostream>
 
 /**
  * @brief Constructeur de la classe MoteurPhysique.
