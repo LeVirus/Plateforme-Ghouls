@@ -10,9 +10,13 @@
  */
 class Sol{
     float mMaxAbscisse, mMinAbscisse, mMaxOrdonnee, mMinOrdonnee;
-    std::vector< float > mVectFloatFonction;
+    std::vector< std::pair< float, float > > mVectPointFonction;
 public:
     Sol();
+    bool bAjoutPoint();
+    bool bSuprimmerPoint();
+    void reinitialiserFonction();
+    bool bVerifCollision(  );
     ~Sol();
 };
 
