@@ -1,4 +1,5 @@
 #include "moteurphysique.hpp"
+#include "moteur.hpp"
 #include <iostream>
 
 /**
@@ -7,6 +8,15 @@
 MoteurPhysique::MoteurPhysique(){
     mPtrMemMoteur = NULL;
 }
+
+/**
+ * @brief MoteurPhysique::recupPointeurMoteur Renvoie un pointeur vers la classe Moteur.
+ * @return Le pointeur de la classe Moteur.
+ */
+Moteur * MoteurPhysique::recupPointeurMoteur(){
+    return mPtrMemMoteur;
+}
+
 
 /**
  * @brief MoteurPhysique::initialiser Fonction créant un liens du moteur physique au moteur général.

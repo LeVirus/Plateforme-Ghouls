@@ -16,6 +16,7 @@ private:
 public:
     MoteurPhysique();
     void initialiser( Moteur *ptrMoteur );
+    Moteur *recupPointeurMoteur();
     ~MoteurPhysique();
 };
 

@@ -173,29 +173,23 @@ void MoteurGraphique::raffraichirEcran(){
  * A l'aide de ces données les sprites correspondants sont affichés.
  */
 void MoteurGraphique::dessinerSpriteECS(){
+
     //récupération du conteneur de composants nécéssaires a l'affichage
-    const std::multimap< DisplayComponent *, PositionComponent * > & MapContainerSprite = mPtrMemMoteur -> getECSEngine() .
-            getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> getMapComponentDisplaySystem() ;
+    const std::vector< std::pair< DisplayComponent *, PositionComponent * > > & vectContainerSprite = mPtrMemMoteur -> getECSEngine() .
+            getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> getVectComponentDisplaySystem();
 
-        //std::cout << MapContainerSprite .size() << "\n";
+    for( unsigned int i = 0; i < vectContainerSprite.size() ;++i ){
 
-    for( std::map< DisplayComponent *, PositionComponent * >::const_iterator it = MapContainerSprite.begin() ; it != MapContainerSprite.end() ; it++ ){
-        //ce fonctionnement est temporaire
-        DisplayComponent *ptrDisplayComp = ( *it) . first;
-        PositionComponent *ptrPositionComp = ( *it) . second;
-        //std::cout << ptrDisplayComp -> muiNumSprite << "Num Sprite\n";
-        //std::cout << ptrPositionComp -> mfPositionX << "Y  " << ptrPositionComp -> mfPositionY <<"\n";
+        if( mVectSprite .size() > vectContainerSprite[ i ] . first -> muiNumSprite &&
+                mVectSprite[ vectContainerSprite[ i ] . first -> muiNumSprite ] ){
 
-
-
-        if( mVectSprite .size() > ptrDisplayComp -> muiNumSprite
-                && mVectSprite[ ptrDisplayComp -> muiNumSprite ] ){
-            mVectSprite[ ptrDisplayComp -> muiNumSprite ] -> setPosition( ptrPositionComp -> mfPositionX, ptrPositionComp -> mfPositionY );
-
-            mFenetre . draw( *mVectSprite[ ptrDisplayComp -> muiNumSprite ] );
+            mVectSprite[ vectContainerSprite[ i ] . first -> muiNumSprite ] -> setPosition(
+                        vectContainerSprite[ i ] . second -> mfPositionX, vectContainerSprite[ i ] . second -> mfPositionY );
+            mFenetre . draw( *mVectSprite[ vectContainerSprite[ i ] . first -> muiNumSprite ] );
         }
         else {//TEST
-            mVectSprite[ 1 ] -> setPosition( ptrPositionComp -> mfPositionX, ptrPositionComp -> mfPositionY );
+            mVectSprite[ 1 ] -> setPosition( vectContainerSprite[ i ] . second -> mfPositionX,
+                                             vectContainerSprite[ i ] . second -> mfPositionY );
 
             mFenetre . draw( *mVectSprite[ 1 ] );
         }

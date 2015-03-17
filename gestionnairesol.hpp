@@ -6,19 +6,26 @@
 
 class MoteurPhysique;
 
+struct PositionComponent;
+struct MoveableComponent;
+
 /**
  * @brief La classe GestionnaireSol traite le ou les sols d'une scene, représentés par des fonctions.
  */
 class GestionnaireSol{
 private:
     std::vector< Sol > mVectSol;
+    std::vector< unsigned int > mVectAssociationEntiteSol;
+    std::vector< std::pair < MoveableComponent *, PositionComponent * > > * mVectComponentEntity;
     MoteurPhysique * mPtrMoteurPhysique;
+
 public:
     GestionnaireSol();
+    void recupVectComponent();
     void ajoutSol();
     void suprimmerSol();
     void liaisonMoteurPhysique( MoteurPhysique * ptrMoteurPhysique );
-    void TraitementEntiteeSol();
+    void TraitementEntiteSol();
     ~GestionnaireSol();
 };
 
