@@ -87,8 +87,8 @@ void Moteur::lancer(){
             }
 
             if( cDirection != 0 )mMoteurG.deplacerEcran( cDirection );
-
-            mECSEngine .execIteration();
+            //mECSEngine . getSystemManager() .searchSystemByType < GravitySystem >( GRAVITY_SYSTEM ) -> recupComponentToEntity();
+            //mECSEngine .execIteration();
             mMoteurG.raffraichirEcran();
         }
 

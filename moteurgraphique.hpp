@@ -8,6 +8,9 @@ class Tableau2D;
 #include <utility>
 #include <memory>
 
+struct DisplayComponent;
+struct PositionComponent;
+
 /**
  * @class MoteurGraphique
  * @brief Classe de gestion de l'affichage.
@@ -23,6 +26,7 @@ class MoteurGraphique{
         std::pair< float, float > mPairLimiteDeplacementEcranHG,
         mPairLimiteDeplacementEcranBD;
         std::pair< unsigned int, unsigned int > mPositionCourranteTableauNiveau;
+        const std::vector< std::pair< DisplayComponent *, PositionComponent * > > * mVectComponentDisplaySystem;
     public:
         MoteurGraphique();
         void synchroniserNiveau();
