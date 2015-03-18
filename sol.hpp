@@ -9,10 +9,13 @@
  * Cet espace est représenté par plusieurs points formant une fonction obtenue à l'aide de l'interolation linéaire.
  */
 class Sol{
+    bool mbActif;
     float mMaxAbscisse, mMinAbscisse, mMaxOrdonnee, mMinOrdonnee;
     std::vector< std::pair< float, float > > mVectPointFonction;
 public:
     Sol();
+    bool bEstActive();
+    void modifierActivation( bool bActif );
     bool bAjoutPoint();
     bool bSuprimmerPoint();
     void reinitialiserFonction();

@@ -21,10 +21,10 @@ private:
 
 public:
     GestionnaireSol();
-    void recupVectComponent();
-    void ajoutSol();
-    void suprimmerSol();
+    unsigned int ajoutSol();
+    void suprimmerSol( unsigned int uiNumSol );
     void liaisonMoteurPhysique( MoteurPhysique * ptrMoteurPhysique );
+    void calculLiensSolEntites();
     void TraitementEntiteSol();
     ~GestionnaireSol();
 };

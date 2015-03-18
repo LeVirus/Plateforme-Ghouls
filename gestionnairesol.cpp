@@ -12,13 +12,27 @@ GestionnaireSol::GestionnaireSol(){
 }
 
 /**
- * @brief GestionnaireSol::recupVectComponent récupération du vector de component nécessaire
- * pour le traitement des collisions avec le sol.
+ * @brief GestionnaireSol::ajoutSol Fonction de création d'une fonction sol vide.
+ * @return Le numéro de case ou la nouvelle fontion sol a été attribuée.
  */
-void GestionnaireSol::recupVectComponent(){
-    if( ! mPtrMoteurPhysique )return;
-    //mVectComponentEntity = mPtrMoteurPhysique -> recupPointeurMoteur() -> getECSEngine() . getSystemManager() .
-      //      searchSystemByType < GravitySystem > ( GRAVITY_SYSTEM ) -> getVectComponentGravitySystem();
+unsigned int GestionnaireSol::ajoutSol(){
+    unsigned int uiRetour;
+    for( unsigned int i = 0 ; i < mVectSol.size() ; ++i ){
+       if( ! mVectSol[ i ] . bEstActive() ){
+            mVectSol[ i ] . modifierActivation( true );
+            uiRetour = i;
+       }
+    }
+    mVectEntity.push_back( Entity( mVectEntity.size() ) );
+    return mVectEntity.size() - 1;
+}
+
+/**
+ * @brief GestionnaireSol::suprimmerSol Supression d'une fonction sol dont le numéro est envoyé en paramètre.
+ * @param uiNumSol le numéro de la fonction sol à suprimmer.
+ */
+void GestionnaireSol::suprimmerSol( unsigned int uiNumSol ){
+
 }
 
 /**

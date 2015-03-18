@@ -8,6 +8,23 @@ Sol::Sol(){
     mMinAbscisse = 0;
     mMaxOrdonnee = 0;
     mMinOrdonnee = 0;
+    mbActif = false;
+}
+
+/**
+ * @brief Sol::bEstEnUtilisation Fonction déterminant si la fonction sol est activée.
+ * @return true si la fonction sol est activée, false sinon.
+ */
+bool Sol::bEstActive(){
+    return mbActif;
+}
+
+/**
+ * @brief Sol::modifierActivation Modifie le booléen déterminant si la fonction sol est activé.
+ * @param bActif la nouvelle valeur de mbActif.
+ */
+void Sol::modifierActivation( bool bActif ){
+    mbActif = bActif;
 }
 
 /**

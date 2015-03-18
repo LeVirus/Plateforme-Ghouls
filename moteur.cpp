@@ -42,7 +42,7 @@ Engine & Moteur::getECSEngine(){
 
 /**
  * @brief Boucle principalle du moteur.
- * Traitement des touches pressée et des modules du moteur.
+ * Traitement des touches pressées et des modules du moteur.
  */
 void Moteur::lancer(){
     unsigned char cDirection, ucTmpCmpt = 0;
