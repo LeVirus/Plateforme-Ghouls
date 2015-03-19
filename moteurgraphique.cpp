@@ -177,18 +177,18 @@ void MoteurGraphique::raffraichirEcran(){
  */
 void MoteurGraphique::dessinerSpriteECS(){
     if( ! mVectComponentDisplaySystem ){
+        //récupération du conteneur de composants nécéssaires a l'affichage
         mVectComponentDisplaySystem = mPtrMemMoteur -> getECSEngine() .
                 getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> getVectComponentDisplaySystem();
     }
 
     assert( mVectComponentDisplaySystem && "mVectComponentDisplaySystem non instancié." );
-    //récupération du conteneur de composants nécéssaires a l'affichage
-    //const std::vector< std::pair< DisplayComponent *, PositionComponent * > > & vectContainerSprite = mPtrMemMoteur -> getECSEngine() .
-      //      getSystemManager() . searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> getVectComponentDisplaySystem();
 
     for( unsigned int i = 0; i < mVectComponentDisplaySystem -> size() ;++i ){
 
-        if( mVectSprite .size() > ( * mVectComponentDisplaySystem )[ i ] . first -> muiNumSprite &&
+        //vérif si le numéro du sprite n'est pas superieur à la taille du tableau contenant les sprites,
+        //et si le sprite en question est bien instancié.
+        if( mVectSprite . size() > ( * mVectComponentDisplaySystem )[ i ] . first -> muiNumSprite &&
                 mVectSprite[ ( * mVectComponentDisplaySystem )[ i ] . first -> muiNumSprite ] ){
 
             mVectSprite[ ( * mVectComponentDisplaySystem )[ i ] . first -> muiNumSprite ] -> setPosition(

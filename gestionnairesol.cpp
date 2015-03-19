@@ -2,6 +2,8 @@
 #include "moteurphysique.hpp"
 #include "moteur.hpp"
 #include "gravitysystem.hpp"
+#include "moveablecomponent.hpp"
+//#include "displaysystem.hpp"
 #include <cassert>
 
 
@@ -9,7 +11,8 @@
  * @brief GestionnaireSol::GestionnaireSol Constructeur de la classe GestionnaireSol.
  */
 GestionnaireSol::GestionnaireSol(){
-    mVectComponentEntity = NULL;
+    mPtrVectComponentGravitySystem = nullptr;
+    mPtrVectComponentDisplaySystem = nullptr;
 }
 
 /**
@@ -34,7 +37,7 @@ unsigned int GestionnaireSol::ajoutSol(){
        }
     }
     mVectSol.push_back( Sol() );
-    return mVectEntity.size() - 1;
+    return mVectSol.size() - 1;
 }
 
 /**
@@ -53,11 +56,23 @@ void GestionnaireSol::suprimmerSol( unsigned int uiNumSol ){
  * Si le pointeur du vector de composants en provenance de GravitySystem est à NULL, sa référence est récupérée.
  */
 void GestionnaireSol::calculLiensSolEntites(){
-    if( ! mVectComponentEntity ){
-        mVectComponentEntity = mPtrMoteurPhysique -> recupPointeurMoteur() -> getECSEngine() . getSystemManager() .
+
+    unsigned int uiNumEntityEnCour;
+    if( ! mPtrVectComponentGravitySystem ){
+        mPtrVectComponentGravitySystem = mPtrMoteurPhysique -> recupPointeurMoteur() -> getECSEngine() . getSystemManager() .
                 searchSystemByType < GravitySystem > ( GRAVITY_SYSTEM ) -> getVectComponentGravitySystem();
     }
-    assert( mVectComponentEntity && "mVectComponentEntity non instancié." );
+    assert( mPtrVectComponentGravitySystem && "mPtrVectComponentGravitySystem non instancié." );
+    /*if( ! mPtrVectComponentDisplaySystem ){
+        mPtrVectComponentDisplaySystem = mPtrMoteurPhysique -> recupPointeurMoteur() -> getECSEngine() . getSystemManager() .
+                searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> getVectComponentDisplaySystem();
+    }
+    assert( mPtrVectComponentDisplaySystem && "mPtrVectComponentDisplaySystem non instancié." );
+    */
+    for( unsigned int i = 0; i < ( * mPtrVectComponentGravitySystem ) . size() ; ++i ){
+        uiNumEntityEnCour = ( * mPtrVectComponentGravitySystem )[ i ] . first -> muiGetIdEntityAssociated();
+        //En suspend GravitySystem à modifier
+    }
 
 }
 
