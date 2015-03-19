@@ -24,6 +24,7 @@ class Moteur{
     public:
         Moteur();
         Engine & getECSEngine();
+        MoteurGraphique & getMoteurGraphique();
         const Tableau2D &recupTabEcran( const float &fPosEcranX, const float &fPosEcranY );
         void synchroniserEcranNiveau( std::pair< float, float > &pairPosEcranHG, std::pair< float, float > &pairPosEcranBD );
         void initialiserMoteur( Jeu *ptrJeu );

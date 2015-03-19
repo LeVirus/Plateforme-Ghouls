@@ -43,6 +43,7 @@ class MoteurGraphique{
         bool bDessinerVertArrayNiveau( const Tableau2D &tabNivEcran );
         bool bAfficherTuileEcran( const Tableau2D &tabNivEcran );
         bool bVerifTableauSimilaire( float fPositionEcranX, float fPositionEcranY );
+        void tmpRecupValeurPositionCollisionSol(unsigned int uiSprite, float &fPointX, float &fPointY );
         ~MoteurGraphique();
 };
 

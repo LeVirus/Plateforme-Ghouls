@@ -42,6 +42,19 @@ void MoteurGraphique::initialiser( Moteur *ptrMoteur ){
 }
 
 /**
+ * @brief MoteurGraphique::tmpRecupValeurPositionCollisionSol Fonction TEMPORAIRE de transmission de la largeur
+ * et de la longueur de la boite englobante du sprite dont le numéro est envoyé en paramètre.
+ * @param uiSprite Le numéro du sprite.
+ * @param fPointX L'abscisse du point sur lequel sera mémorisé la position de collision avec le sol.
+ * @param fPointY L'ordonnée du point sur lequel sera mémorisé la position de collision avec le sol.
+ */
+void MoteurGraphique::tmpRecupValeurPositionCollisionSol( unsigned int uiSprite, float & fPointX, float & fPointY ){
+    fPointX = mVectSprite[ uiSprite ] -> getLocalBounds() . width;
+    fPointY = mVectSprite[ uiSprite ] -> getLocalBounds() . height;
+}
+
+
+/**
  * @brief MoteurGraphique::initialiserNiveau
  * Fonction de chargement des textures et des sprites associés au niveau, dont le numéro est envoyé en paramètre.
  * @param uiNumNiveau le numéro du niveau

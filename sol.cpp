@@ -34,6 +34,11 @@ void Sol::reinitialiserFonction(){
     mVectPointFonction . clear();
 }
 
+bool Sol::bVerifCollision(  ){
+
+}
+
+
 /**
  * @brief Sol::Sol Destructeur de la classe Sol.
  */

@@ -41,6 +41,15 @@ Engine & Moteur::getECSEngine(){
 }
 
 /**
+ * @brief Moteur::getMoteurGraphique Renvoie la référence du moteur graphique.
+ * @return Le moteur graphique par référence.
+ */
+MoteurGraphique & Moteur::getMoteurGraphique(){
+    return mMoteurG;
+}
+
+
+/**
  * @brief Boucle principalle du moteur.
  * Traitement des touches pressées et des modules du moteur.
  */
@@ -165,7 +174,6 @@ void Moteur::chargerEntitesTest(){
     MoveableComponent * moveCompA = compMan . searchComponentByType< MoveableComponent >( 1, MOVEABLE_COMPONENT );
     if( moveCompA ){
         moveCompA -> mfVelocite = 5;
-        moveCompA -> mbTerrestrial = true;
     }
 
     mECSEngine.getSystemManager().searchSystemByType< IASystem >( IA_SYSTEM ) ->  initMoveable( behavComp, posComp, moveComp );

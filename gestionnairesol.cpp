@@ -3,7 +3,8 @@
 #include "moteur.hpp"
 #include "gravitysystem.hpp"
 #include "moveablecomponent.hpp"
-//#include "displaysystem.hpp"
+#include "groundcomponent.hpp"
+#include "displaysystem.hpp"
 #include <cassert>
 
 
@@ -12,7 +13,6 @@
  */
 GestionnaireSol::GestionnaireSol(){
     mPtrVectComponentGravitySystem = nullptr;
-    mPtrVectComponentDisplaySystem = nullptr;
 }
 
 /**
@@ -57,24 +57,49 @@ void GestionnaireSol::suprimmerSol( unsigned int uiNumSol ){
  */
 void GestionnaireSol::calculLiensSolEntites(){
 
-    unsigned int uiNumEntityEnCour;
+    float fPointCollisionSolX, fPointCollisionSolY;
+    unsigned int uiNumSprite;
+
     if( ! mPtrVectComponentGravitySystem ){
         mPtrVectComponentGravitySystem = mPtrMoteurPhysique -> recupPointeurMoteur() -> getECSEngine() . getSystemManager() .
-                searchSystemByType < GravitySystem > ( GRAVITY_SYSTEM ) -> getVectComponentGravitySystem();
+                searchSystemByType < GravitySystem > ( GRAVITY_SYSTEM ) -> getVectTupleComponentGravitySystem();
     }
     assert( mPtrVectComponentGravitySystem && "mPtrVectComponentGravitySystem non instancié." );
-    /*if( ! mPtrVectComponentDisplaySystem ){
-        mPtrVectComponentDisplaySystem = mPtrMoteurPhysique -> recupPointeurMoteur() -> getECSEngine() . getSystemManager() .
-                searchSystemByType < DisplaySystem > ( DISPLAY_SYSTEM ) -> getVectComponentDisplaySystem();
-    }
-    assert( mPtrVectComponentDisplaySystem && "mPtrVectComponentDisplaySystem non instancié." );
-    */
+
     for( unsigned int i = 0; i < ( * mPtrVectComponentGravitySystem ) . size() ; ++i ){
-        uiNumEntityEnCour = ( * mPtrVectComponentGravitySystem )[ i ] . first -> muiGetIdEntityAssociated();
-        //En suspend GravitySystem à modifier
+
+        //si GroundComponent n'est pas initialisé
+        if( ! std::get< 2 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> mbInit ){
+            uiNumSprite = std::get< 3 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> muiNumSprite;
+            mPtrMoteurPhysique -> recupPointeurMoteur() -> getMoteurGraphique() .
+                    tmpRecupValeurPositionCollisionSol( uiNumSprite, fPointCollisionSolX, fPointCollisionSolY );
+            std::get< 2 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> mfGroundCollisionPositionX = fPointCollisionSolX;
+            std::get< 2 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> mfGroundCollisionPositionY = fPointCollisionSolY;
+        }
+
+        //mVectSol[ j ] . bVerifCollision(  );
+        //implémenter la vérification de collisions avec le sol
     }
 
 }
+
+/**
+ * @brief GestionnaireSol::definirPointCollisionSol Fonction TEMPORAIRE de calcul du point de collision à utiliser pour les
+ * interactions avec le sol.
+ * @param uiNumSprite Le numéro du sprite de l'entité.
+ * @param fPointX L'abscisse du point sur lequel sera mémorisé la position de collision avec le sol.
+ * @param fPointY L'ordonnée du point sur lequel sera mémorisé la position de collision avec le sol.
+ */
+void GestionnaireSol::tmpDefinirPointCollisionSol( unsigned int uiNumSprite, float & fPointX, float & fPointY ){
+    mPtrMoteurPhysique -> recupPointeurMoteur() -> getMoteurGraphique() .
+            tmpRecupValeurPositionCollisionSol( uiNumSprite, fPointX, fPointY );
+    fPointX /= 2;
+
+    //a modifier pour placer les points de collisions avec le sol à des positions paramétrables
+}
+
+
+
 
 /**
  * @brief GestionnaireSol::GestionnaireSol Destructeur de la classe GestionnaireSol.
