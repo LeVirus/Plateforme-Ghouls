@@ -28,6 +28,13 @@ void Sol::modifierActivation( bool bActif ){
 }
 
 /**
+ * @brief Sol::reinitialiserFonction Fonction de supression des points composants la fonction.
+ */
+void Sol::reinitialiserFonction(){
+    mVectPointFonction . clear();
+}
+
+/**
  * @brief Sol::Sol Destructeur de la classe Sol.
  */
 Sol::~Sol(){
