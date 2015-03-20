@@ -14,12 +14,17 @@ class Sol{
     std::vector< std::pair< float, float > > mVectPointFonction;
 public:
     Sol();
-    bool bEstActive();
+    bool bEstActive()const;
     void modifierActivation( bool bActif );
-    bool bAjoutPoint();
+    void miseAJourBoiteEnglobanteFonction();
+    void ajoutPoint( float fX, float fY );
+    void ajoutPoint( std::pair < float, float > & pairPointFloat );
+    bool bAttribuerFonction( std::vector< std::pair < float, float > > &vectFonction );
     bool bSuprimmerPoint();
     void reinitialiserFonction();
-    bool bVerifCollision(  );
+    bool bVerifCollision(  )const;
+    bool bVerifCoherencePoint( float fX )const;
+    void afficherFonction()const;
     ~Sol();
 };
 
