@@ -98,7 +98,16 @@ void GestionnaireSol::tmpDefinirPointCollisionSol( unsigned int uiNumSprite, flo
     //a modifier pour placer les points de collisions avec le sol à des positions paramétrables
 }
 
+/**
+ * @brief GestionnaireSol::recupSol Fonction renvoyant une référence vers le Sol dont le numéro est envoyé en paramètre.
+ * @param uiNumSol le numéro du Sol à récupérer.
+ * @return Une référence vers le Sol demandé.
+ */
+Sol * GestionnaireSol::recupSol( unsigned int uiNumSol ){
+    if( uiNumSol > mVectSol.size() )return nullptr;
 
+    return & mVectSol[ uiNumSol ];
+}
 
 
 /**

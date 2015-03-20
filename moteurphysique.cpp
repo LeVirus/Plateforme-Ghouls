@@ -26,6 +26,27 @@ void MoteurPhysique::initialiser( Moteur *ptrMoteur ){
     if( ptrMoteur )mPtrMemMoteur = ptrMoteur;
 }
 
+/**
+ * @brief MoteurPhysique::initialiserSol
+ */
+void MoteurPhysique::initialiserSolTest(){
+    mGestSol . ajoutSol();
+    Sol * solTest = mGestSol.recupSol( 0 );
+    if( ! solTest )return;
+
+    std::pair< float, float > pairFloat( 0.0, 0.0 );
+
+    if( ! solTest -> ajoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
+    if( ! solTest -> ajoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
+    pairFloat . first = -150.0;
+    pairFloat . second = 654.0;
+    if( ! solTest -> ajoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
+    pairFloat . first = 150.0;
+    pairFloat . second = 654.0;
+    if( ! solTest -> ajoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
+    solTest -> afficherFonction();
+}
+
 
 /**
  * @brief Destructeur de la classe MoteurPhysique.

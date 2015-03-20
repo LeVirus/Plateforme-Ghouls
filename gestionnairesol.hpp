@@ -30,6 +30,7 @@ public:
     void liaisonMoteurPhysique( MoteurPhysique * ptrMoteurPhysique );
     void calculLiensSolEntites();
     void TraitementEntiteSol();
+    Sol * recupSol( unsigned int uiNumSol );
     ~GestionnaireSol();
 };
 

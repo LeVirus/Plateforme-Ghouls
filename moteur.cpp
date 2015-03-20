@@ -57,6 +57,8 @@ void Moteur::lancer(){
     unsigned char cDirection, ucTmpCmpt = 0;
     mMoteurG.synchroniserNiveau();
 
+    mMoteurPhysique . initialiserSolTest();
+
     InputComponent * inputComp = mECSEngine . getComponentManager() . searchComponentByType< InputComponent >( 1, INPUT_COMPONENT );
     if( ! inputComp ) std::cout << "erreur inputComp NULL\n";
     do{

@@ -17,13 +17,14 @@ public:
     bool bEstActive()const;
     void modifierActivation( bool bActif );
     void miseAJourBoiteEnglobanteFonction();
-    void ajoutPoint( float fX, float fY );
-    void ajoutPoint( std::pair < float, float > & pairPointFloat );
+    bool ajoutPoint( float fX, float fY );
+    bool ajoutPoint( std::pair < float, float > & pairPointFloat );
     bool bAttribuerFonction( std::vector< std::pair < float, float > > &vectFonction );
     bool bSuprimmerPoint();
     void reinitialiserFonction();
-    bool bVerifCollision(  )const;
-    bool bVerifCoherencePoint( float fX )const;
+    bool bVerifCollision( float fX, float fY )const;
+    bool bVerifCollisionSolBoiteEnglobante( float fX, float fY )const;
+    bool bVerifCoherencePoint(float fX , float fY)const;
     void afficherFonction()const;
     ~Sol();
 };

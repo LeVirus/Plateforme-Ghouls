@@ -18,7 +18,7 @@ class Jeu;
 class Moteur{
     private:
         MoteurGraphique mMoteurG;
-        MoteurGraphique mMoteurPhysique;
+        MoteurPhysique mMoteurPhysique;
         Jeu *mPtrMemJeu;
         Engine mECSEngine;
     public:

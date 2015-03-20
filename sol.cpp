@@ -1,5 +1,6 @@
 #include "sol.hpp"
 #include <iostream>
+#include <limits>
 
 /**
  * @brief Sol::Sol Constructeur de la classe Sol.
@@ -35,8 +36,23 @@ void Sol::reinitialiserFonction(){
     mVectPointFonction . clear();
 }
 
-bool Sol::bVerifCollision(  ) const{
+bool Sol::bVerifCollision( float fX, float fY ) const{
+    if( bVerifCollisionSolBoiteEnglobante( fX, fY ) )
+        return false;
 
+}
+
+/**
+ * @brief Sol::bVerifCollisionSolBoiteEnglobante Fonction de test de collision entre la boite englobante de la fonction
+ * et le point envoyé en paramètre.
+ * @param fX L'abscisse du point à tester.
+ * @param fY L'ordonnée du point à tester.
+ * @return true si le point se trouve dans la boite englobante de la fonction, false sinon.
+ */
+bool Sol::bVerifCollisionSolBoiteEnglobante( float fX, float fY )const{
+    if( ( fX <= mMaxAbscisse && fX >= mMinAbscisse ) && ( fY <= mMaxOrdonnee && fY >= mMinOrdonnee ) )
+        return true;
+    return false;
 }
 
 /**
@@ -44,26 +60,36 @@ bool Sol::bVerifCollision(  ) const{
  * @param fX l'abscisse du point à tester.
  * @return true si le nouveau point est accepté, false sinon.
  */
-bool Sol::bVerifCoherencePoint( float fX )const{
+bool Sol::bVerifCoherencePoint( float fX, float fY )const{
     if( mVectPointFonction . size() == 0 )
         return true;
+
+    //cas ou le dernier point est identique au point à ajouter                                  ;
+    if( (  fX - mVectPointFonction[ mVectPointFonction . size() - 1 ] . first < std::numeric_limits< float >::epsilon() ) &&
+        (  fY - mVectPointFonction[ mVectPointFonction . size() - 1 ] . second < std::numeric_limits< float >::epsilon() ) )
+        return false;
+
     return fX >= mVectPointFonction[ mVectPointFonction . size() - 1 ] . first;
 }
 
 /**
  * @brief Sol::bAjoutPoint Ajout d'un point à la fonction avec 2 variables float.
  */
-void Sol::ajoutPoint( float fX, float fY ){
-    if( ! bVerifCoherencePoint( fX ) )return;
+bool Sol::ajoutPoint( float fX, float fY ){
+    if( ! bVerifCoherencePoint( fX, fY ) )return false;
     mVectPointFonction . push_back( std::pair < float, float >( fX, fY ) );
+    miseAJourBoiteEnglobanteFonction();
+    return true;
 }
 
 /**
  * @brief Sol::bAjoutPoint Ajout d'un point à la fonction avec un pair de float.
  */
-void Sol::ajoutPoint( std::pair < float, float > & pairPointFloat ){
-    if( ! bVerifCoherencePoint( pairPointFloat . first ) )return;
+bool Sol::ajoutPoint( std::pair < float, float > & pairPointFloat ){
+    if( ! bVerifCoherencePoint( pairPointFloat . first, pairPointFloat . second ) )return false;
     mVectPointFonction . push_back( std::pair < float, float >( pairPointFloat . first, pairPointFloat . second ) );
+    miseAJourBoiteEnglobanteFonction();
+    return true;
 }
 
 /**
@@ -72,11 +98,14 @@ void Sol::ajoutPoint( std::pair < float, float > & pairPointFloat ){
  */
 bool Sol::bAttribuerFonction( std::vector< std::pair < float, float > > & vectFonction ){
     if( vectFonction.size() == 0 )return false;
+
     mVectPointFonction . clear();
     mVectPointFonction . resize( vectFonction.size() );
+
     for( unsigned int i = 0; i < vectFonction.size() ; ++i ){
         ajoutPoint( vectFonction[ i ] );
     }
+    miseAJourBoiteEnglobanteFonction();
     return true;
 }
 
