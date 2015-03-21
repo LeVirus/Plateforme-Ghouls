@@ -36,14 +36,14 @@ void MoteurPhysique::initialiserSolTest(){
 
     std::pair< float, float > pairFloat( 0.0, 0.0 );
 
-    if( ! solTest -> ajoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
-    if( ! solTest -> ajoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
+    if( ! solTest -> bAjoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
+    if( ! solTest -> bAjoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
     pairFloat . first = -150.0;
     pairFloat . second = 654.0;
-    if( ! solTest -> ajoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
+    if( ! solTest -> bAjoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
     pairFloat . first = 150.0;
     pairFloat . second = 654.0;
-    if( ! solTest -> ajoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
+    if( ! solTest -> bAjoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
     solTest -> afficherFonction();
 }
 

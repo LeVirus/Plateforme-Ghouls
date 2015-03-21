@@ -18,8 +18,8 @@ public:
     bool bEstActive()const;
     void modifierActivation( bool bActif );
     void miseAJourBoiteEnglobanteFonction();
-    bool ajoutPoint( float fX, float fY );
-    bool ajoutPoint( std::pair < float, float > & pairPointFloat );
+    bool bAjoutPoint( float fX, float fY );
+    bool bAjoutPoint( std::pair < float, float > & pairPointFloat );
     bool bAttribuerFonction( std::vector< std::pair < float, float > > &vectFonction );
     bool bSuprimmerPoint( unsigned int uiNumPoint );
     void reinitialiserFonction();
@@ -29,9 +29,11 @@ public:
 
     bool bVerifCoherencePoint( float fX , float fY )const;
     void afficherFonction()const;
-    bool calculCohefDirectFonction();
-    float calculCohefDirectSegment( float fAX , float fAY, float fBX , float fBY );
+    bool bCalculCohefDirectFonction();
+    float fCalculCohefDirectSegment( float fAX , float fAY, float fBX , float fBY );
 
+    float fRetourYFonction( float fX );
+    float fRetourYSegment( float fX, unsigned int uiNumSegment );
     ~Sol();
 };
 

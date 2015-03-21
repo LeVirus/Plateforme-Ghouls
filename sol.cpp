@@ -1,4 +1,5 @@
 #include "sol.hpp"
+#include "constantes.hpp"
 #include <iostream>
 #include <limits>
 
@@ -75,7 +76,7 @@ bool Sol::bVerifCoherencePoint( float fX, float fY )const{
 /**
  * @brief Sol::bAjoutPoint Ajout d'un point à la fonction avec 2 variables float.
  */
-bool Sol::ajoutPoint( float fX, float fY ){
+bool Sol::bAjoutPoint( float fX, float fY ){
     if( ! bVerifCoherencePoint( fX, fY ) )return false;
     mVectPointFonction . push_back( std::pair < float, float >( fX, fY ) );
     miseAJourBoiteEnglobanteFonction();
@@ -85,7 +86,7 @@ bool Sol::ajoutPoint( float fX, float fY ){
 /**
  * @brief Sol::bAjoutPoint Ajout d'un point à la fonction avec un pair de float.
  */
-bool Sol::ajoutPoint( std::pair < float, float > & pairPointFloat ){
+bool Sol::bAjoutPoint( std::pair < float, float > & pairPointFloat ){
     if( ! bVerifCoherencePoint( pairPointFloat . first, pairPointFloat . second ) )return false;
     mVectPointFonction . push_back( std::pair < float, float >( pairPointFloat . first, pairPointFloat . second ) );
     miseAJourBoiteEnglobanteFonction();
@@ -98,7 +99,7 @@ bool Sol::ajoutPoint( std::pair < float, float > & pairPointFloat ){
  */
 bool Sol::bSuprimmerPoint( unsigned int uiNumPoint ){
     if( uiNumPoint >= mVectPointFonction . size() )return false;
-    mVectPointFonction . erase( uiNumPoint );
+    mVectPointFonction . erase( mVectPointFonction . begin() + uiNumPoint );
     return true;
 }
 
@@ -113,7 +114,7 @@ bool Sol::bAttribuerFonction( std::vector< std::pair < float, float > > & vectFo
     mVectPointFonction . resize( vectFonction.size() );
 
     for( unsigned int i = 0; i < vectFonction.size() ; ++i ){
-        ajoutPoint( vectFonction[ i ] );
+        bAjoutPoint( vectFonction[ i ] );
     }
     miseAJourBoiteEnglobanteFonction();
     return true;
@@ -171,14 +172,15 @@ void Sol::miseAJourBoiteEnglobanteFonction(){
  * @brief Sol::calculCohefDirectFonction Fonction calculant les cohéficients directeurs de chaque segment de la fonction.
  * Les résultats sont stockés dans un tableau.
  */
-bool Sol::calculCohefDirectFonction(){
+bool Sol::bCalculCohefDirectFonction(){
     if( mVectPointFonction . size() <= 1 )return false;
     mVectCohefDirect . resize( mVectPointFonction . size() - 1 );
 
     for( unsigned int i = 0; i < mVectCohefDirect . size() - 1 ; ++i ){
-        mVectCohefDirect[ i ] = calculDeriveSegment( mVectPointFonction[ i ] . first, mVectPointFonction[ i ] . second,
+        mVectCohefDirect[ i ] = fCalculCohefDirectSegment( mVectPointFonction[ i ] . first, mVectPointFonction[ i ] . second,
                                                      mVectPointFonction[ i + 1 ] . first, mVectPointFonction[ i + 1 ] . second );
     }
+    return true;
 }
 
 /**
@@ -189,8 +191,36 @@ bool Sol::calculCohefDirectFonction(){
  * @param fBY L'abscisse du premier point du segment.
  * @return La valeur de la derive.
  */
-float Sol::calculDeriveSegment( float fAX , float fAY, float fBX , float fBY ){
-    return ( fBY - fAY ) / ( fBX - fAX )
+float Sol::fCalculCohefDirectSegment( float fAX , float fAY, float fBX , float fBY ){
+    return ( fBY - fAY ) / ( fBX - fAX );
+}
+
+/**
+ * @brief Sol::fRetourYFonction Calcul du Y de la fonction avec un paramètre X.
+ * La fonction va trouver le segment concerné et appeler la fonction fRetourYSegment.
+ * @param fX La valeur de X par rapport à la fonction.
+ * @return La valeur de Y trouvé à l'aide du X.
+ */
+float Sol::fRetourYFonction( float fX ){
+    if( fX < mVectPointFonction[ 0 ] . first || fX > mVectPointFonction[ mVectPointFonction . size() - 1 ] . first )
+        return ERREUR_VALEUR_HORS_LIMITE;
+    for( unsigned int i = 1; i < mVectPointFonction . size() ; ++i ){
+        if( fX <= mVectPointFonction[ i ] . first )return fRetourYSegment( fX,i - 1 );
+    }
+    return ERREUR_VALEUR_HORS_LIMITE;
+}
+
+/**
+ * @brief Sol::fRetourYSegment Calcul du Y de la fonction avec un paramètre X sur le segment envoyé en paramètre.
+ * @param fX La valeur de X par rapport à la fonction.
+ * @param uiNumSegment Le numéro du segment à tester.
+ * @return La valeur de Y trouvé à l'aide du X.
+ */
+float Sol::fRetourYSegment( float fX, unsigned int uiNumSegment ){
+    if( uiNumSegment >= mVectPointFonction . size() - 1 )return ERREUR_VALEUR_HORS_LIMITE;
+    else if( fX < mVectPointFonction[ uiNumSegment ] . first || fX > mVectPointFonction[ uiNumSegment + 1 ] . first )
+        return ERREUR_VALEUR_HORS_LIMITE;
+
 }
 
 /**
