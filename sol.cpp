@@ -93,6 +93,16 @@ bool Sol::ajoutPoint( std::pair < float, float > & pairPointFloat ){
 }
 
 /**
+ * @brief Sol::bSuprimmerPoint Suppression du point dont le numéro est envoyé en paramètre.
+ * @return true si le point a bien été suprimmé, false sinon.
+ */
+bool Sol::bSuprimmerPoint( unsigned int uiNumPoint ){
+    if( uiNumPoint >= mVectPointFonction . size() )return false;
+    mVectPointFonction . erase( uiNumPoint );
+    return true;
+}
+
+/**
  * @brief Sol::attribuerFonction Attribution d'un tableau de point à la fonction.
  * @param vectFonction Un tableau de points.
  */
@@ -155,6 +165,32 @@ void Sol::miseAJourBoiteEnglobanteFonction(){
             fMinOrdonnee = mVectPointFonction[ i ] . second;
     }
 
+}
+
+/**
+ * @brief Sol::calculCohefDirectFonction Fonction calculant les cohéficients directeurs de chaque segment de la fonction.
+ * Les résultats sont stockés dans un tableau.
+ */
+bool Sol::calculCohefDirectFonction(){
+    if( mVectPointFonction . size() <= 1 )return false;
+    mVectCohefDirect . resize( mVectPointFonction . size() - 1 );
+
+    for( unsigned int i = 0; i < mVectCohefDirect . size() - 1 ; ++i ){
+        mVectCohefDirect[ i ] = calculDeriveSegment( mVectPointFonction[ i ] . first, mVectPointFonction[ i ] . second,
+                                                     mVectPointFonction[ i + 1 ] . first, mVectPointFonction[ i + 1 ] . second );
+    }
+}
+
+/**
+ * @brief calculCohefDirectSegment Calcul du cohéficients directeurs d'un segment donné.
+ * @param fAX L'abscisse du premier point du segment.
+ * @param fAY L'abscisse du premier point du segment.
+ * @param fBX L'abscisse du premier point du segment.
+ * @param fBY L'abscisse du premier point du segment.
+ * @return La valeur de la derive.
+ */
+float Sol::calculDeriveSegment( float fAX , float fAY, float fBX , float fBY ){
+    return ( fBY - fAY ) / ( fBX - fAX )
 }
 
 /**
