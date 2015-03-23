@@ -11,8 +11,10 @@
 class Sol{
     bool mbActif;
     float mMaxAbscisse, mMinAbscisse, mMaxOrdonnee, mMinOrdonnee;
-    std::vector< std::pair< float, float > > mVectPointFonction;
+    std::vector< std::pair< float, float > > mVectPointFonction, mVectConstanteFonctionSegment;
+    //mVectConstanteFonctionSegment . first ==> a :: . second ==> b ( equation fonction :: y = ax + b )
     std::vector< float > mVectCohefDirect;
+    bool bCalculConstanteSegment( unsigned int uiNumSegment );
 public:
     Sol();
     bool bEstActive()const;
@@ -29,6 +31,9 @@ public:
 
     bool bVerifCoherencePoint( float fX , float fY )const;
     void afficherFonction()const;
+
+    bool bCalculConstanteFonction();
+
     bool bCalculCohefDirectFonction();
     float fCalculCohefDirectSegment( float fAX , float fAY, float fBX , float fBY );
 

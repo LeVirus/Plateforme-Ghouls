@@ -171,6 +171,7 @@ void Sol::miseAJourBoiteEnglobanteFonction(){
 /**
  * @brief Sol::calculCohefDirectFonction Fonction calculant les cohéficients directeurs de chaque segment de la fonction.
  * Les résultats sont stockés dans un tableau.
+ * @return false si la fonction ne comporte qu'un seul ou aucun point, true si le calcul a bien été effectué.
  */
 bool Sol::bCalculCohefDirectFonction(){
     if( mVectPointFonction . size() <= 1 )return false;
@@ -192,12 +193,14 @@ bool Sol::bCalculCohefDirectFonction(){
  * @return La valeur de la derive.
  */
 float Sol::fCalculCohefDirectSegment( float fAX , float fAY, float fBX , float fBY ){
+    if( fBX <= fAX )return ERREUR_VALEUR_HORS_LIMITE;
     return ( fBY - fAY ) / ( fBX - fAX );
 }
 
 /**
  * @brief Sol::fRetourYFonction Calcul du Y de la fonction avec un paramètre X.
  * La fonction va trouver le segment concerné et appeler la fonction fRetourYSegment.
+ * Les fonctions bCalculCohefDirectFonction et bCalculConstanteFonction doivent avoir été appelée antérieurement.
  * @param fX La valeur de X par rapport à la fonction.
  * @return La valeur de Y trouvé à l'aide du X.
  */
@@ -217,10 +220,41 @@ float Sol::fRetourYFonction( float fX ){
  * @return La valeur de Y trouvé à l'aide du X.
  */
 float Sol::fRetourYSegment( float fX, unsigned int uiNumSegment ){
-    if( uiNumSegment >= mVectPointFonction . size() - 1 )return ERREUR_VALEUR_HORS_LIMITE;
-    else if( fX < mVectPointFonction[ uiNumSegment ] . first || fX > mVectPointFonction[ uiNumSegment + 1 ] . first )
+    if( uiNumSegment >= mVectPointFonction . size() - 1 || ( fX < mVectPointFonction[ uiNumSegment ] . first ||
+                                                             fX > mVectPointFonction[ uiNumSegment + 1 ] . first ) )
         return ERREUR_VALEUR_HORS_LIMITE;
+}
 
+/**
+ * @brief Sol::bCalculConstanteFonction Fonction calculant et mémorisant les constantes a et b des fonctions "y = ax + b".
+ * Ces fonctions correspondant a chaque segment de la fonction.
+ * La fonction bCalculCohefDirectFonction doit avoir été appelée précédemment.
+ * @return false si la fonction ne comporte qu'un seul ou aucun point, true si le calcul a bien été effectué.
+ */
+bool Sol::bCalculConstanteFonction(){
+    if( mVectPointFonction . size() <= 1 )return false;
+    mVectConstanteFonctionSegment . resize( mVectPointFonction . size() - 1 );
+    for( unsigned int i = 0; i < mVectPointFonction . size() - 1 ; ++i ){
+        bCalculConstanteSegment( i );
+    }
+    return true;
+}
+
+/**
+ * @brief Sol::bCalculConstanteSegment Calcul et mémorisation des constantes de la fonction associé d'un segment.
+ * @param uiNumSegment Le numéro du segment à traiter.
+ * @return true si le calcul a été effectué, false sinon.
+ */
+bool Sol::bCalculConstanteSegment( unsigned int uiNumSegment ){
+    if( uiNumSegment >= mVectPointFonction . size() - 1 || mVectConstanteFonctionSegment . size() < uiNumSegment + 1 )return false;
+    //calcul de b :: b = point . y - point . x * coeff direct segment
+    mVectConstanteFonctionSegment[ uiNumSegment ] . second = mVectPointFonction[ uiNumSegment ] . second -
+            mVectPointFonction[ uiNumSegment ] . first * mVectCohefDirect[ uiNumSegment ];
+    //calcul de a :: a = ( point . y / point . x ) - b
+    mVectConstanteFonctionSegment[ uiNumSegment ] . first = ( mVectPointFonction[ uiNumSegment ] . second /
+                                                              mVectPointFonction[ uiNumSegment ] . first ) -
+                                                              mVectConstanteFonctionSegment[ uiNumSegment ] . second;
+    return true;
 }
 
 /**
