@@ -223,6 +223,9 @@ float Sol::fRetourYSegment( float fX, unsigned int uiNumSegment ){
     if( uiNumSegment >= mVectPointFonction . size() - 1 || ( fX < mVectPointFonction[ uiNumSegment ] . first ||
                                                              fX > mVectPointFonction[ uiNumSegment + 1 ] . first ) )
         return ERREUR_VALEUR_HORS_LIMITE;
+    //yRecherché = YdebutSegment + ( distance abscisse premier point et point recherché ) * coheffDirecteurSegment
+    return mVectPointFonction[ uiNumSegment ] . second +
+            ( fX - mVectPointFonction[ uiNumSegment ] . first ) * mVectCohefDirect[ uiNumSegment ];
 }
 
 /**

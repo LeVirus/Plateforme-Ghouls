@@ -31,7 +31,7 @@ void MoteurPhysique::initialiser( Moteur *ptrMoteur ){
  */
 void MoteurPhysique::initialiserSolTest(){
     mGestSol . ajoutSol();
-    Sol * solTest = mGestSol.recupSol( 0 );
+    Sol * solTest = mGestSol . recupSol( 0 );
     if( ! solTest )return;
 
     std::pair< float, float > pairFloat( 0.0, 0.0 );

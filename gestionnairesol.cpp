@@ -69,6 +69,7 @@ void GestionnaireSol::calculLiensSolEntites(){
     for( unsigned int i = 0; i < ( * mPtrVectComponentGravitySystem ) . size() ; ++i ){
 
         //si GroundComponent n'est pas initialisé
+        //récupération du point de collision avec le sol de l'entité
         if( ! std::get< 2 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> mbInit ){
             uiNumSprite = std::get< 3 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> muiNumSprite;
             mPtrMoteurPhysique -> recupPointeurMoteur() -> getMoteurGraphique() .

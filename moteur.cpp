@@ -99,8 +99,8 @@ void Moteur::lancer(){
 
             if( cDirection != 0 )mMoteurG.deplacerEcran( cDirection );
             //mECSEngine . getSystemManager() .searchSystemByType < GravitySystem >( GRAVITY_SYSTEM ) -> recupComponentToEntity();
-            //mECSEngine .execIteration();
-            mMoteurG.raffraichirEcran();
+            mECSEngine . execIteration();
+            mMoteurG . raffraichirEcran();
         }
 
     }while( true );
@@ -123,6 +123,7 @@ void Moteur::chargerEntitesTest(){
     mECSEngine.bAddComponentToEntity( 1, POSITION_COMPONENT );
     mECSEngine.bAddComponentToEntity( 1, MOVEABLE_COMPONENT );
     mECSEngine.bAddComponentToEntity( 1, INPUT_COMPONENT );
+    mECSEngine.bAddComponentToEntity( 1, GROUND_COMPONENT );
 
     if( ! mECSEngine.getSystemManager().bAddSystem( DISPLAY_SYSTEM ) ) std::cout << "Echec DisplaySystem non ajouté\n" ;
     if( ! mECSEngine.getSystemManager().bAddSystem( IA_SYSTEM ) ) std::cout << "Echec BehaviorSystem non ajouté\n" ;
