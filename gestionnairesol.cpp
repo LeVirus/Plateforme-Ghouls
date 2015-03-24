@@ -41,10 +41,12 @@ void GestionnaireSol::memPositionEntites(){
 
 /**
  * @brief GestionnaireSol::traitementEntitesChutesSols Réajustement de la position des entités qui entre en collision avec le sol.
- * La fonction vérifie si les entités ne sont pas sur le sol, et si elle tombent.
+ * La fonction vérifie si les entités ne sont pas sur le sol, et si elle se dirige vers le bas.
  */
 void GestionnaireSol::traitementEntitesChutesSols(){
+    for( unsigned int i = 0 ; i < mVectPositionPrecedantesEntites . size(); ++i ){
 
+    }
 }
 
 /**
