@@ -20,16 +20,20 @@ private:
     std::vector< unsigned int > mVectAssociationEntiteSol;
     std::vector< std::tuple< MoveableComponent *, PositionComponent *, GroundComponent *, DisplayComponent * > >
         * mPtrVectComponentGravitySystem;
+    std::vector< std::pair< float, float > > mVectPositionPrecedantesEntites;
     MoteurPhysique * mPtrMoteurPhysique;
 
 public:
     GestionnaireSol();
     void tmpDefinirPointCollisionSol( unsigned int uiNumSprite, float & fPointX, float & fPointY );
+
+    void memPositionEntites();
+    void traitementEntitesChutesSols();
+
     unsigned int ajoutSol();
     void suprimmerSol( unsigned int uiNumSol );
     void liaisonMoteurPhysique( MoteurPhysique * ptrMoteurPhysique );
     void calculLiensSolEntites();
-    void TraitementEntiteSol();
     Sol * recupSol( unsigned int uiNumSol );
     ~GestionnaireSol();
 };

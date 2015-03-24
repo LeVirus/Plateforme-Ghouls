@@ -25,6 +25,29 @@ void GestionnaireSol::liaisonMoteurPhysique( MoteurPhysique * ptrMoteurPhysique 
 }
 
 /**
+ * @brief GestionnaireSol::memPositionEntites Mémorisation des positions des entités qui interagissent avec le sol à un
+ * instant t.
+ */
+void GestionnaireSol::memPositionEntites(){
+    mVectPositionPrecedantesEntites . resize( mPtrVectComponentGravitySystem -> size() );
+    for( unsigned int i = 0 ; i < mPtrVectComponentGravitySystem . size() ; ++i ){
+        mVectPositionPrecedantesEntites[ i ] . first = std::get< 1 >( ( * mPtrVectComponentGravitySystem )[ i ] ) . mfPositionX +
+        std::get< 2 >( ( * mPtrVectComponentGravitySystem )[ i ] ) . mfGroundCollisionPositionX;
+
+        mVectPositionPrecedantesEntites[ i ] . second = std::get< 1 >( ( * mPtrVectComponentGravitySystem )[ i ] ) . mfPositionY +
+        std::get< 2 >( ( * mPtrVectComponentGravitySystem )[ i ] ) . mfGroundCollisionPositionY;
+    }
+}
+
+/**
+ * @brief GestionnaireSol::traitementEntitesChutesSols Réajustement de la position des entités qui entre en collision avec le sol.
+ * La fonction vérifie si les entités ne sont pas sur le sol, et si elle tombent.
+ */
+void GestionnaireSol::traitementEntitesChutesSols(){
+
+}
+
+/**
  * @brief GestionnaireSol::ajoutSol Fonction de création d'une fonction sol vide.
  * Si une case dont l'objet Sol n'est pas activé le nouveau Sol sera attribué à cette case.
  * @return Le numéro de case ou la nouvelle fontion sol a été attribuée.
@@ -36,8 +59,8 @@ unsigned int GestionnaireSol::ajoutSol(){
             return i;
        }
     }
-    mVectSol.push_back( Sol() );
-    return mVectSol.size() - 1;
+    mVectSol . push_back( Sol() );
+    return mVectSol . size() - 1;
 }
 
 /**
