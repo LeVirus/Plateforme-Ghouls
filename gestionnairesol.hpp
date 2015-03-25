@@ -18,7 +18,7 @@ class GestionnaireSol{
 private:
     std::vector< Sol > mVectSol;
     std::vector< unsigned int > mVectAssociationEntiteSol;
-    std::vector< std::tuple< MoveableComponent *, PositionComponent *, GroundComponent *, DisplayComponent * > >
+    std::vector< std::tuple< MoveableComponent *, PositionComponent *, GroundComponent *, DisplayComponent *, unsigned int > >
         * mPtrVectComponentGravitySystem;
     std::vector< std::pair< float, float > > mVectPositionPrecedantesEntites;
     MoteurPhysique * mPtrMoteurPhysique;

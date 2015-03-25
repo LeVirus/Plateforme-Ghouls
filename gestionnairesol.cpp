@@ -29,13 +29,17 @@ void GestionnaireSol::liaisonMoteurPhysique( MoteurPhysique * ptrMoteurPhysique 
  * instant t.
  */
 void GestionnaireSol::memPositionEntites(){
-    mVectPositionPrecedantesEntites . resize( mPtrVectComponentGravitySystem -> size() );
-    for( unsigned int i = 0 ; i < mPtrVectComponentGravitySystem . size() ; ++i ){
-        mVectPositionPrecedantesEntites[ i ] . first = std::get< 1 >( ( * mPtrVectComponentGravitySystem )[ i ] ) . mfPositionX +
-        std::get< 2 >( ( * mPtrVectComponentGravitySystem )[ i ] ) . mfGroundCollisionPositionX;
+    //récupération du numéro de l'entité ayant le plus haut numéro
+    mVectPositionPrecedantesEntites . resize( std::get< 4 >
+                                             ( ( * mPtrVectComponentGravitySystem )[ mPtrVectComponentGravitySystem -> size() -1 ] ) );
+    for( unsigned int i = 0 ; i < mPtrVectComponentGravitySystem -> size() ; ++i ){
+        mVectPositionPrecedantesEntites[ std::get< 4 >( ( * mPtrVectComponentGravitySystem )[ i ] ) ] .
+                first = std::get< 1 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> mfPositionX +
+        std::get< 2 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> mfGroundCollisionPositionX;
 
-        mVectPositionPrecedantesEntites[ i ] . second = std::get< 1 >( ( * mPtrVectComponentGravitySystem )[ i ] ) . mfPositionY +
-        std::get< 2 >( ( * mPtrVectComponentGravitySystem )[ i ] ) . mfGroundCollisionPositionY;
+        mVectPositionPrecedantesEntites[ std::get< 4 >( ( * mPtrVectComponentGravitySystem )[ i ] ) ] .
+                second = std::get< 1 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> mfPositionY +
+        std::get< 2 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> mfGroundCollisionPositionY;
     }
 }
 
@@ -44,7 +48,7 @@ void GestionnaireSol::memPositionEntites(){
  * La fonction vérifie si les entités ne sont pas sur le sol, et si elle se dirige vers le bas.
  */
 void GestionnaireSol::traitementEntitesChutesSols(){
-    for( unsigned int i = 0 ; i < mVectPositionPrecedantesEntites . size(); ++i ){
+    for( unsigned int i = 0 ; i < mPtrVectComponentGravitySystem -> size(); ++i ){
 
     }
 }
@@ -92,7 +96,6 @@ void GestionnaireSol::calculLiensSolEntites(){
     assert( mPtrVectComponentGravitySystem && "mPtrVectComponentGravitySystem non instancié." );
 
     for( unsigned int i = 0; i < ( * mPtrVectComponentGravitySystem ) . size() ; ++i ){
-
         //si GroundComponent n'est pas initialisé
         //récupération du point de collision avec le sol de l'entité
         if( ! std::get< 2 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> mbInit ){
