@@ -13,8 +13,7 @@ class Sol{
     float mMaxAbscisse, mMinAbscisse, mMaxOrdonnee, mMinOrdonnee;
     std::vector< std::pair< float, float > > mVectPointFonction, mVectConstanteFonctionSegment;
     //mVectConstanteFonctionSegment . first ==> a :: . second ==> b ( equation fonction :: y = ax + b )
-    std::vector< float > mVectCohefDirect;
-    bool bCalculConstanteSegment( unsigned int uiNumSegment );
+    bool bCalculConstanteSegment( float fPointAX, float fPointAY, float fPointBX, float fPointBY, float & fCstA, float & fCstB );
 public:
     Sol();
     bool bEstActive()const;
