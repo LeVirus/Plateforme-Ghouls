@@ -205,12 +205,13 @@ void MoteurGraphique::dessinerSpriteECS(){
                 mVectSprite[ ( * mVectComponentDisplaySystem )[ i ] . first -> muiNumSprite ] ){
 
             mVectSprite[ ( * mVectComponentDisplaySystem )[ i ] . first -> muiNumSprite ] -> setPosition(
-                        ( * mVectComponentDisplaySystem )[ i ] . second -> mfPositionX, ( * mVectComponentDisplaySystem )[ i ] . second -> mfPositionY );
+                        ( * mVectComponentDisplaySystem )[ i ] . second -> vect2DPosComp . mfX,
+                        ( * mVectComponentDisplaySystem )[ i ] . second -> vect2DPosComp . mfY );
             mFenetre . draw( *mVectSprite[ ( * mVectComponentDisplaySystem )[ i ] . first -> muiNumSprite ] );
         }
         else {//TEST
-            mVectSprite[ 1 ] -> setPosition( ( * mVectComponentDisplaySystem )[ i ] . second -> mfPositionX,
-                                             ( * mVectComponentDisplaySystem )[ i ] . second -> mfPositionY );
+            mVectSprite[ 1 ] -> setPosition( ( * mVectComponentDisplaySystem )[ i ] . second -> vect2DPosComp . mfX,
+                                             ( * mVectComponentDisplaySystem )[ i ] . second -> vect2DPosComp . mfY );
 
             mFenetre . draw( *mVectSprite[ 1 ] );
         }

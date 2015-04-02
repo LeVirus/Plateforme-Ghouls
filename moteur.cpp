@@ -9,6 +9,8 @@
 #include "displaycomponent.hpp"
 #include "behaviorcomponent.hpp"
 #include "moveablecomponent.hpp"
+#include "ringbehaviorcomponent.hpp"
+#include "sinusoidbehaviorcomponent.hpp"
 #include "displaysystem.hpp"
 #include "inputsystem.hpp"
 #include "iasystem.hpp"
@@ -113,17 +115,22 @@ void Moteur::lancer(){
 void Moteur::chargerEntitesTest(){
     ComponentManager & compMan = mECSEngine.getComponentManager();
     mECSEngine.AddEntity();
-    mECSEngine.AddEntity();
+    //mECSEngine.AddEntity();
     mECSEngine.bAddComponentToEntity( 0, DISPLAY_COMPONENT );
     mECSEngine.bAddComponentToEntity( 0, POSITION_COMPONENT );
     mECSEngine.bAddComponentToEntity( 0, BEHAVIOR_COMPONENT );
     mECSEngine.bAddComponentToEntity( 0, MOVEABLE_COMPONENT );
+    mECSEngine.bAddComponentToEntity( 0, RING_BEHAVIOR_COMPONENT );
+    mECSEngine.bAddComponentToEntity( 0, SINUSOID_BEHAVIOR_COMPONENT );
 
     mECSEngine.bAddComponentToEntity( 1, DISPLAY_COMPONENT );
     mECSEngine.bAddComponentToEntity( 1, POSITION_COMPONENT );
     mECSEngine.bAddComponentToEntity( 1, MOVEABLE_COMPONENT );
     mECSEngine.bAddComponentToEntity( 1, INPUT_COMPONENT );
-    mECSEngine.bAddComponentToEntity( 1, GROUND_COMPONENT );
+    //mECSEngine.bAddComponentToEntity( 1, GROUND_COMPONENT );
+    //mECSEngine.bAddComponentToEntity( 1, RING_BEHAVIOR_COMPONENT );
+
+    mECSEngine.displayVectEntity();
 
     if( ! mECSEngine.getSystemManager().bAddSystem( DISPLAY_SYSTEM ) ) std::cout << "Echec DisplaySystem non ajouté\n" ;
     if( ! mECSEngine.getSystemManager().bAddSystem( IA_SYSTEM ) ) std::cout << "Echec BehaviorSystem non ajouté\n" ;
@@ -141,8 +148,8 @@ void Moteur::chargerEntitesTest(){
     //ENTITE 0==========================================================
     PositionComponent * posComp = compMan . searchComponentByType< PositionComponent >( 0, POSITION_COMPONENT );
     if( posComp ){
-        posComp -> mfPositionX = 100;
-        posComp -> mfPositionY = 50;
+        posComp -> vect2DPosComp . mfX = 50;
+        posComp -> vect2DPosComp . mfY = 100;
     }
     DisplayComponent * dispComp = compMan . searchComponentByType< DisplayComponent >( 0, DISPLAY_COMPONENT );
     if( dispComp ){
@@ -150,24 +157,28 @@ void Moteur::chargerEntitesTest(){
     }
     BehaviorComponent * behavComp = compMan . searchComponentByType< BehaviorComponent >( 0, BEHAVIOR_COMPONENT );
     if( behavComp ){
+        //behavComp -> muiTypeBehavior = ROUND_TRIP;
+        behavComp -> muiTypeBehavior = SINUSOIDAL;
         //behavComp -> muiTypeBehavior = RING;
-        //behavComp -> muiTypeBehavior = SINUSOIDAL;
-        behavComp -> muiTypeBehavior = ROUND_TRIP;
     }
 
     MoveableComponent * moveComp = compMan . searchComponentByType< MoveableComponent >( 0, MOVEABLE_COMPONENT );
     if( moveComp ){
         moveComp -> mfVelocite = 3;
-        moveComp -> mVectFCustumVar[ 0 ] = 200;
-        moveComp -> mVectFCustumVar[ 1 ] = 30;
         //moveComp -> mbTerrestrial = false;
+    }
+
+    SinusoidBehaviorComponent * sinusComp = compMan . searchComponentByType< SinusoidBehaviorComponent >( 0, SINUSOID_BEHAVIOR_COMPONENT );
+    if( sinusComp ){
+        sinusComp -> mfAmplitudeSinusoid = 40;
+        sinusComp -> mfDirectionAxisSinusoid = 0;
     }
 
     //ENTITE 1==========================================================
     PositionComponent * posCompA = compMan . searchComponentByType< PositionComponent >( 1, POSITION_COMPONENT );
     if( posCompA ){
-        posCompA -> mfPositionX = 0;
-        posCompA -> mfPositionY = 0;
+        posCompA -> vect2DPosComp . mfX = 0;
+        posCompA -> vect2DPosComp . mfY = 0;
     }
     DisplayComponent * dispCompA = compMan . searchComponentByType< DisplayComponent >( 1, DISPLAY_COMPONENT );
     if( dispCompA ){
@@ -179,7 +190,7 @@ void Moteur::chargerEntitesTest(){
         moveCompA -> mfVelocite = 5;
     }
 
-    mECSEngine.getSystemManager().searchSystemByType< IASystem >( IA_SYSTEM ) ->  initMoveable( behavComp, posComp, moveComp );
+    mECSEngine.getSystemManager().searchSystemByType< IASystem >( IA_SYSTEM ) ->  initMoveable( 0 );
     //InputSystem * inputSystem = mECSEngine.getSystemManager().searchSystemByType< InputSystem >( INPUT_SYSTEM );
 
 

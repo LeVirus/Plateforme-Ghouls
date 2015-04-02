@@ -6,7 +6,7 @@
 /**
  * @brief La classe Sol est représentative d'un espace sur lequel les entités physiques terrestres peuvent
  * demeurer.
- * Cet espace est représenté par plusieurs points formant une fonction obtenue à l'aide de l'interolation linéaire.
+ * Cet espace est représenté par plusieurs points formant une fonction obtenue à l'aide de l'interpolation linéaire.
  */
 class Sol{
     bool mbActif;

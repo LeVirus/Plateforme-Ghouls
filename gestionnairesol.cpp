@@ -81,7 +81,7 @@ void GestionnaireSol::suprimmerSol( unsigned int uiNumSol ){
 }
 
 /**
- * @brief GestionnaireSol::calculLiensSolEntites Fonction calculant sur quels fonction sol chaque entité se dirige.
+ * @brief GestionnaireSol::calculLiensSolEntites Fonction calculant sur quelle fonction sol chaque entité se dirige.
  * Si le pointeur du vector de composants en provenance de GravitySystem est à NULL, sa référence est récupérée.
  */
 void GestionnaireSol::calculLiensSolEntites(){
