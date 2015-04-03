@@ -28,7 +28,7 @@ void GestionnaireSol::liaisonMoteurPhysique( MoteurPhysique * ptrMoteurPhysique 
  * @brief GestionnaireSol::memPositionEntites Mémorisation des positions des entités qui interagissent avec le sol à un
  * instant t.
  */
-void GestionnaireSol::memPositionEntites(){
+/*void GestionnaireSol::memPositionEntites(){
     //récupération du numéro de l'entité ayant le plus haut numéro
     mVectPositionPrecedantesEntites . resize( std::get< 4 >
                                              ( ( * mPtrVectComponentGravitySystem )[ mPtrVectComponentGravitySystem -> size() -1 ] ) );
@@ -41,7 +41,7 @@ void GestionnaireSol::memPositionEntites(){
                 second = std::get< 1 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> mfPositionY +
         std::get< 2 >( ( * mPtrVectComponentGravitySystem )[ i ] ) -> mfGroundCollisionPositionY;
     }
-}
+}*/
 
 /**
  * @brief GestionnaireSol::traitementEntitesChutesSols Réajustement de la position des entités qui entre en collision avec le sol.

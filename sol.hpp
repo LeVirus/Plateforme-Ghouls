@@ -2,6 +2,7 @@
 #define SOL_H
 
 #include <vector>
+#include "vector2D.hpp"
 
 /**
  * @brief La classe Sol est représentative d'un espace sur lequel les entités physiques terrestres peuvent
@@ -11,24 +12,23 @@
 class Sol{
     bool mbActif;
     float mMaxAbscisse, mMinAbscisse, mMaxOrdonnee, mMinOrdonnee;
-    std::vector< std::pair< float, float > > mVectPointFonction, mVectConstanteFonctionSegment;
+    std::vector< Vector2D > mVectPointFonction;
     //mVectConstanteFonctionSegment . first ==> a :: . second ==> b ( equation fonction :: y = ax + b )
-    bool bCalculConstanteSegment( float fPointAX, float fPointAY, float fPointBX, float fPointBY, float & fCstA, float & fCstB );
 public:
     Sol();
     bool bEstActive()const;
     void modifierActivation( bool bActif );
     void miseAJourBoiteEnglobanteFonction();
     bool bAjoutPoint( float fX, float fY );
-    bool bAjoutPoint( std::pair < float, float > & pairPointFloat );
-    bool bAttribuerFonction( std::vector< std::pair < float, float > > &vectFonction );
+    bool bAjoutPoint( Vector2D & pairPointFloat );
+    bool bAttribuerFonction( std::vector< Vector2D > &vectFonction );
     bool bSuprimmerPoint( unsigned int uiNumPoint );
     void reinitialiserFonction();
 
     bool bVerifCollision( float fX, float fY )const;
     bool bVerifCollisionSolBoiteEnglobante( float fX, float fY )const;
 
-    bool bVerifCoherencePoint( float fX , float fY )const;
+    bool bVerifCoherencePoint( const Vector2D &vect2dA )const;
     void afficherFonction()const;
 
     bool bCalculConstanteFonction();

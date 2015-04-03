@@ -86,7 +86,7 @@ bool Sol::bAjoutPoint( float fX, float fY ){
 /**
  * @brief Sol::bAjoutPoint Ajout d'un point à la fonction avec un pair de float.
  */
-bool Sol::bAjoutPoint( std::pair < float, float > & pairPointFloat ){
+bool Sol::bAjoutPoint( Vector2D &pairPointFloat ){
     if( ! bVerifCoherencePoint( pairPointFloat . first, pairPointFloat . second ) )return false;
     mVectPointFonction . push_back( std::pair < float, float >( pairPointFloat . first, pairPointFloat . second ) );
     miseAJourBoiteEnglobanteFonction();
@@ -107,7 +107,7 @@ bool Sol::bSuprimmerPoint( unsigned int uiNumPoint ){
  * @brief Sol::attribuerFonction Attribution d'un tableau de point à la fonction.
  * @param vectFonction Un tableau de points.
  */
-bool Sol::bAttribuerFonction( std::vector< std::pair < float, float > > & vectFonction ){
+bool Sol::bAttribuerFonction(std::vector<Vector2D> &vectFonction ){
     if( vectFonction.size() == 0 )return false;
 
     mVectPointFonction . clear();
