@@ -57,8 +57,28 @@ bool Sol::bVerifCollisionSolBoiteEnglobante( float fX, float fY )const{
 }
 
 /**
+ * @brief Sol::bVerifCollision
+ * @param vect2dA
+ * @return
+ */
+bool Sol::bVerifCollision( const Vector2D &vect2dA )const{
+    return bVerifCollision( vect2dA . mfX, vect2dA . mfY );
+}
+
+/**
+ * @brief Sol::bVerifCollision Fonction de test de collision entre la boite englobante de la fonction
+ * et le point envoyé en paramètre.
+ * @param vect2dA Le Vector2D contenant le point.
+ * @return true si le point se trouve dans la boite englobante de la fonction, false sinon.
+ */
+bool Sol::bVerifCollisionSolBoiteEnglobante( const Vector2D &vect2dA )const{
+    return bVerifCollisionSolBoiteEnglobante( vect2dA . mfX, vect2dA . mfY );
+}
+
+/**
  * @brief Sol::bVerifCoherencePoint Fonction de vérification de l'abscisse du point précédent avec le point à ajouter.
  * @param fX l'abscisse du point à tester.
+ * @param fY l'ordonné du point à tester.
  * @return true si le nouveau point est accepté, false sinon.
  */
 bool Sol::bVerifCoherencePoint( float fX, float fY )const{
@@ -66,19 +86,29 @@ bool Sol::bVerifCoherencePoint( float fX, float fY )const{
         return true;
 
     //cas ou le dernier point est identique au point à ajouter                                  ;
-    if( (  fX - mVectPointFonction[ mVectPointFonction . size() - 1 ] . first < std::numeric_limits< float >::epsilon() ) &&
-        (  fY - mVectPointFonction[ mVectPointFonction . size() - 1 ] . second < std::numeric_limits< float >::epsilon() ) )
+    if( (  fX - mVectPointFonction[ mVectPointFonction . size() - 1 ] . mfX < std::numeric_limits< float >::epsilon() ) &&
+        (  fY - mVectPointFonction[ mVectPointFonction . size() - 1 ] . mfY < std::numeric_limits< float >::epsilon() ) )
         return false;
 
-    return fX >= mVectPointFonction[ mVectPointFonction . size() - 1 ] . first;
+    return fX >= mVectPointFonction[ mVectPointFonction . size() - 1 ] . mfX;
 }
+
+/**
+ * @brief Sol::bVerifCoherencePoint Fonction de vérification de l'abscisse du point précédent avec le point à ajouter.
+ * @param vect2dA
+ * @return
+ */
+bool Sol::bVerifCoherencePoint( const Vector2D &vect2dA )const{
+    return bVerifCoherencePoint( vect2dA . mfX, vect2dA . mfY );
+}
+
 
 /**
  * @brief Sol::bAjoutPoint Ajout d'un point à la fonction avec 2 variables float.
  */
 bool Sol::bAjoutPoint( float fX, float fY ){
     if( ! bVerifCoherencePoint( fX, fY ) )return false;
-    mVectPointFonction . push_back( std::pair < float, float >( fX, fY ) );
+    mVectPointFonction . push_back( Vector2D( fX, fY ) );
     miseAJourBoiteEnglobanteFonction();
     return true;
 }
@@ -86,11 +116,8 @@ bool Sol::bAjoutPoint( float fX, float fY ){
 /**
  * @brief Sol::bAjoutPoint Ajout d'un point à la fonction avec un pair de float.
  */
-bool Sol::bAjoutPoint( Vector2D &pairPointFloat ){
-    if( ! bVerifCoherencePoint( pairPointFloat . first, pairPointFloat . second ) )return false;
-    mVectPointFonction . push_back( std::pair < float, float >( pairPointFloat . first, pairPointFloat . second ) );
-    miseAJourBoiteEnglobanteFonction();
-    return true;
+bool Sol::bAjoutPoint( const Vector2D &pairPointFloat ){
+    return bAjoutPoint( pairPointFloat . mfX, pairPointFloat . mfY );
 }
 
 /**
@@ -107,7 +134,7 @@ bool Sol::bSuprimmerPoint( unsigned int uiNumPoint ){
  * @brief Sol::attribuerFonction Attribution d'un tableau de point à la fonction.
  * @param vectFonction Un tableau de points.
  */
-bool Sol::bAttribuerFonction(std::vector<Vector2D> &vectFonction ){
+bool Sol::bAttribuerFonction( std::vector< Vector2D > &vectFonction ){
     if( vectFonction.size() == 0 )return false;
 
     mVectPointFonction . clear();
@@ -126,8 +153,8 @@ bool Sol::bAttribuerFonction(std::vector<Vector2D> &vectFonction ){
 void Sol::afficherFonction()const{
     std::cout << "Debut affichage fonction\n";
     for( unsigned int i = 0; i < mVectPointFonction . size() ; ++i ){
-        std::cout << "point::" << i << "  " << mVectPointFonction[ i ] . first <<
-                     "  " << mVectPointFonction[ i ] . second << "\n";
+        std::cout << "point::" << i << "  " << mVectPointFonction[ i ] . mfX <<
+                     "  " << mVectPointFonction[ i ] . mfY << "\n";
     }
     std::cout << "Fin affichage fonction\n";
 }
@@ -147,23 +174,23 @@ void Sol::miseAJourBoiteEnglobanteFonction(){
     }
 
     //traitement abscisses
-    mMinAbscisse = mVectPointFonction[ 0 ] . first;
-    mMaxAbscisse = mVectPointFonction[ mVectPointFonction.size() - 1 ] . first;
+    mMinAbscisse = mVectPointFonction[ 0 ] . mfX;
+    mMaxAbscisse = mVectPointFonction[ mVectPointFonction.size() - 1 ] . mfX;
 
     //traitement  ordonnées
 
     //initialisation des 2 variables à la valeur de l'ordonnée du premier point
-    fMaxOrdonnee = mVectPointFonction[ 0 ] . second;
-    fMinOrdonnee = mVectPointFonction[ 0 ] . second;
+    fMaxOrdonnee = mVectPointFonction[ 0 ] . mfY;
+    fMinOrdonnee = mVectPointFonction[ 0 ] . mfY;
 
     if( mVectPointFonction . size() == 1 )return;
     for( unsigned int i = 1; i < mVectPointFonction . size() ; ++i ){
-        if( fMaxOrdonnee < mVectPointFonction[ i ] . second ){
-            fMaxOrdonnee = mVectPointFonction[ i ] . second;
+        if( fMaxOrdonnee < mVectPointFonction[ i ] . mfY ){
+            fMaxOrdonnee = mVectPointFonction[ i ] . mfY;
             continue;
         }
-        if( fMinOrdonnee > mVectPointFonction[ i ] . second )
-            fMinOrdonnee = mVectPointFonction[ i ] . second;
+        if( fMinOrdonnee > mVectPointFonction[ i ] . mfY )
+            fMinOrdonnee = mVectPointFonction[ i ] . mfY;
     }
 
 }
@@ -189,12 +216,14 @@ float Sol::fCalculCohefDirectSegment( float fAX , float fAY, float fBX , float f
  * @return La valeur de Y trouvé à l'aide du X.
  */
 float Sol::fRetourYFonction( float fX ){
-    if( fX < mVectPointFonction[ 0 ] . first || fX > mVectPointFonction[ mVectPointFonction . size() - 1 ] . first )
-        return ERREUR_VALEUR_HORS_LIMITE;
+    if( fX < mVectPointFonction[ 0 ] . mfX || fX > mVectPointFonction[ mVectPointFonction . size() - 1 ] . mfX )
+        assert( false && "Point hors limite de la fonction." );
+
     for( unsigned int i = 1; i < mVectPointFonction . size() ; ++i ){
-        if( fX <= mVectPointFonction[ i ] . first )return fRetourYSegment( fX,i - 1 );
+        if( fX <= mVectPointFonction[ i ] . mfX )return fRetourYSegment( fX, i - 1 );
     }
-    return ERREUR_VALEUR_HORS_LIMITE;
+    assert( false && "Point hors limite de la fonction." );
+    return 0;//erreur
 }
 
 /**
@@ -204,12 +233,12 @@ float Sol::fRetourYFonction( float fX ){
  * @return La valeur de Y trouvé à l'aide du X.
  */
 float Sol::fRetourYSegment( float fX, unsigned int uiNumSegment ){
-    if( uiNumSegment >= mVectPointFonction . size() - 1 || ( fX < mVectPointFonction[ uiNumSegment ] . first ||
-                                                             fX > mVectPointFonction[ uiNumSegment + 1 ] . first ) )
+    if( uiNumSegment >= mVectPointFonction . size() - 1 || ( fX < mVectPointFonction[ uiNumSegment ] . mfX ||
+                                                             fX > mVectPointFonction[ uiNumSegment + 1 ] . mfX ) )
         return ERREUR_VALEUR_HORS_LIMITE;
     //yRecherché = YdebutSegment + ( distance abscisse premier point et point recherché ) * coheffDirecteurSegment
-    return mVectPointFonction[ uiNumSegment ] . second +
-            ( fX - mVectPointFonction[ uiNumSegment ] . first ) * mVectConstanteFonctionSegment[ uiNumSegment ] . first;
+    return mVectPointFonction[ uiNumSegment ] . mfY +
+            ( fX - mVectPointFonction[ uiNumSegment ] . mfX ) * mVectConstanteFonctionSegment[ uiNumSegment ] . mfX;
 }
 
 /**
@@ -221,9 +250,9 @@ bool Sol::bCalculConstanteFonction(){
     if( mVectPointFonction . size() <= 1 )return false;
     mVectConstanteFonctionSegment . resize( mVectPointFonction . size() - 1 );
     for( unsigned int i = 0; i < mVectPointFonction . size() - 1 ; ++i ){
-        bCalculConstanteSegment( mVectPointFonction[ i ] . first, mVectPointFonction[ i ] . second,
-                                 mVectPointFonction[ i + 1 ] . first, mVectPointFonction[ i + 1 ] . second,
-                                 mVectConstanteFonctionSegment[ i ] . first, mVectConstanteFonctionSegment[ i ] . second );
+        bCalculConstanteSegment( mVectPointFonction[ i ] . mfX, mVectPointFonction[ i ] . mfY,
+                                 mVectPointFonction[ i + 1 ] . mfX, mVectPointFonction[ i + 1 ] . mfY,
+                                 mVectConstanteFonctionSegment[ i ] . mfX, mVectConstanteFonctionSegment[ i ] . mfY );
     }
     return true;
 }
