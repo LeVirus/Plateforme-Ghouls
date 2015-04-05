@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     moteurphysique.cpp \
     gestionnairesol.cpp \
     sol.cpp \
-    fonction.cpp
+    fonction.cpp \
+    constantes.cpp
 
 include(deployment.pri)
 qtcAddDeployment()

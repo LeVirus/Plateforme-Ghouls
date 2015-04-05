@@ -2,6 +2,7 @@
 #include "constantes.hpp"
 #include <iostream>
 #include <limits>
+#include <cassert>
 
 /**
  * @brief Sol::Sol Constructeur de la classe Sol.
@@ -35,6 +36,7 @@ void Sol::modifierActivation( bool bActif ){
  */
 void Sol::reinitialiserFonction(){
     mVectPointFonction . clear();
+    miseAJourBoiteEnglobanteFonction();
 }
 
 bool Sol::bVerifCollision( float fX, float fY ) const{
@@ -57,15 +59,6 @@ bool Sol::bVerifCollisionSolBoiteEnglobante( float fX, float fY )const{
 }
 
 /**
- * @brief Sol::bVerifCollision
- * @param vect2dA
- * @return
- */
-bool Sol::bVerifCollision( const Vector2D &vect2dA )const{
-    return bVerifCollision( vect2dA . mfX, vect2dA . mfY );
-}
-
-/**
  * @brief Sol::bVerifCollision Fonction de test de collision entre la boite englobante de la fonction
  * et le point envoyé en paramètre.
  * @param vect2dA Le Vector2D contenant le point.
@@ -73,6 +66,15 @@ bool Sol::bVerifCollision( const Vector2D &vect2dA )const{
  */
 bool Sol::bVerifCollisionSolBoiteEnglobante( const Vector2D &vect2dA )const{
     return bVerifCollisionSolBoiteEnglobante( vect2dA . mfX, vect2dA . mfY );
+}
+
+/**
+ * @brief Sol::bVerifCollision
+ * @param vect2dA
+ * @return
+ */
+bool Sol::bVerifCollision( const Vector2D &vect2dA )const{
+    return bVerifCollision( vect2dA . mfX, vect2dA . mfY );
 }
 
 /**
@@ -86,8 +88,8 @@ bool Sol::bVerifCoherencePoint( float fX, float fY )const{
         return true;
 
     //cas ou le dernier point est identique au point à ajouter                                  ;
-    if( (  fX - mVectPointFonction[ mVectPointFonction . size() - 1 ] . mfX < std::numeric_limits< float >::epsilon() ) &&
-        (  fY - mVectPointFonction[ mVectPointFonction . size() - 1 ] . mfY < std::numeric_limits< float >::epsilon() ) )
+    if( (  fX - mVectPointFonction[ mVectPointFonction . size() - 1 ] . mfX < ZERO_FLOAT ) &&
+        (  fY - mVectPointFonction[ mVectPointFonction . size() - 1 ] . mfY < ZERO_FLOAT ) )
         return false;
 
     return fX >= mVectPointFonction[ mVectPointFonction . size() - 1 ] . mfX;
@@ -127,6 +129,7 @@ bool Sol::bAjoutPoint( const Vector2D &pairPointFloat ){
 bool Sol::bSuprimmerPoint( unsigned int uiNumPoint ){
     if( uiNumPoint >= mVectPointFonction . size() )return false;
     mVectPointFonction . erase( mVectPointFonction . begin() + uiNumPoint );
+    miseAJourBoiteEnglobanteFonction();
     return true;
 }
 
@@ -196,19 +199,6 @@ void Sol::miseAJourBoiteEnglobanteFonction(){
 }
 
 /**
- * @brief calculCohefDirectSegment Calcul du cohéficients directeurs d'un segment donné.
- * @param fAX L'abscisse du premier point du segment.
- * @param fAY L'abscisse du premier point du segment.
- * @param fBX L'abscisse du premier point du segment.
- * @param fBY L'abscisse du premier point du segment.
- * @return La valeur de la derive.
- */
-float Sol::fCalculCohefDirectSegment( float fAX , float fAY, float fBX , float fBY ){
-    if( fBX <= fAX )return ERREUR_VALEUR_HORS_LIMITE;
-    return ( fBY - fAY ) / ( fBX - fAX );
-}
-
-/**
  * @brief Sol::fRetourYFonction Calcul du Y de la fonction avec un paramètre X.
  * La fonction va trouver le segment concerné et appeler la fonction fRetourYSegment.
  * Les fonctions bCalculCohefDirectFonction et bCalculConstanteFonction doivent avoir été appelée antérieurement.
@@ -216,29 +206,13 @@ float Sol::fCalculCohefDirectSegment( float fAX , float fAY, float fBX , float f
  * @return La valeur de Y trouvé à l'aide du X.
  */
 float Sol::fRetourYFonction( float fX ){
-    if( fX < mVectPointFonction[ 0 ] . mfX || fX > mVectPointFonction[ mVectPointFonction . size() - 1 ] . mfX )
-        assert( false && "Point hors limite de la fonction." );
+    assert( ! ( fX < mMinAbscisse || fX > mMaxAbscisse ) && "Point hors limite de la fonction." );
 
     for( unsigned int i = 1; i < mVectPointFonction . size() ; ++i ){
-        if( fX <= mVectPointFonction[ i ] . mfX )return fRetourYSegment( fX, i - 1 );
+        if( fX <= mVectPointFonction[ i ] . mfX )return mVectSegmentFonction[ i - 1 ] .fRetourYSegment( fX );
     }
     assert( false && "Point hors limite de la fonction." );
     return 0;//erreur
-}
-
-/**
- * @brief Sol::fRetourYSegment Calcul du Y de la fonction avec un paramètre X sur le segment envoyé en paramètre.
- * @param fX La valeur de X par rapport à la fonction.
- * @param uiNumSegment Le numéro du segment à tester.
- * @return La valeur de Y trouvé à l'aide du X.
- */
-float Sol::fRetourYSegment( float fX, unsigned int uiNumSegment ){
-    if( uiNumSegment >= mVectPointFonction . size() - 1 || ( fX < mVectPointFonction[ uiNumSegment ] . mfX ||
-                                                             fX > mVectPointFonction[ uiNumSegment + 1 ] . mfX ) )
-        return ERREUR_VALEUR_HORS_LIMITE;
-    //yRecherché = YdebutSegment + ( distance abscisse premier point et point recherché ) * coheffDirecteurSegment
-    return mVectPointFonction[ uiNumSegment ] . mfY +
-            ( fX - mVectPointFonction[ uiNumSegment ] . mfX ) * mVectConstanteFonctionSegment[ uiNumSegment ] . mfX;
 }
 
 /**
@@ -246,36 +220,13 @@ float Sol::fRetourYSegment( float fX, unsigned int uiNumSegment ){
  * Ces fonctions correspondant a chaque segment de la fonction.
  * @return false si la fonction ne comporte qu'un seul ou aucun point, true si le calcul a bien été effectué.
  */
-bool Sol::bCalculConstanteFonction(){
-    if( mVectPointFonction . size() <= 1 )return false;
-    mVectConstanteFonctionSegment . resize( mVectPointFonction . size() - 1 );
-    for( unsigned int i = 0; i < mVectPointFonction . size() - 1 ; ++i ){
-        bCalculConstanteSegment( mVectPointFonction[ i ] . mfX, mVectPointFonction[ i ] . mfY,
-                                 mVectPointFonction[ i + 1 ] . mfX, mVectPointFonction[ i + 1 ] . mfY,
-                                 mVectConstanteFonctionSegment[ i ] . mfX, mVectConstanteFonctionSegment[ i ] . mfY );
+void Sol::bCalculConstanteFonction(){
+    for( unsigned int i = 0; i < mVectSegmentFonction . size() - 1 ; ++i ){
+        mVectSegmentFonction[ i ] . bCalculConstanteSegment();
     }
-    return true;
 }
 
-/**
- * @brief Sol::bCalculConstanteSegment Calcul des constantes a et b d'une fonction y = ax + b issu d'un segment dont les coordonnées
- * de 2 points sont envoyés en arguments.
- * @param fPointAX L'abscisse du point a.
- * @param fPointAY L'ordonnée du point a.
- * @param fPointBX L'abscisse du point b.
- * @param fPointBY L'ordonnée du point b.
- * @param fCstA Le coheficient directeur du segment [ a, b ].
- * @param fCstB La constante b de la fonction y = a * x + b.( a == cohefficient directeur ).
- * @return true si les calculs ont été fait avec succés, false sinon.
- */
-bool Sol::bCalculConstanteSegment( float fPointAX, float fPointAY, float fPointBX, float fPointBY, float & fCstA, float & fCstB ){
-    //calcul de a :: cohefficient directeur
-    fCstA = fCalculCohefDirectSegment( fPointAX , fPointAY, fPointBX , fPointBY );
-    if( fCstA == ERREUR_VALEUR_HORS_LIMITE )return false;
-    //calcul de b :: b = ya - ( a * xa )
-    fCstB = fPointAY - fPointAX * fCstA;
-    return true;
-}
+
 
 /**
  * @brief Sol::Sol Destructeur de la classe Sol.

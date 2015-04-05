@@ -20,6 +20,7 @@ public:
     bool bCalculConstantesFonction();
     float fRetourYSegment( float fX );
     float fRetourCohefDirectSegment();
+    bool bCalculConstanteSegment();
     ~SegmentFonction();
 };
 

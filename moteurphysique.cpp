@@ -1,6 +1,9 @@
 #include "moteurphysique.hpp"
+#include "constantes.hpp"
 #include "moteur.hpp"
+#include "vector2D.hpp"
 #include <iostream>
+#include <cassert>
 
 /**
  * @brief Constructeur de la classe MoteurPhysique.
@@ -27,23 +30,23 @@ void MoteurPhysique::initialiser( Moteur *ptrMoteur ){
 }
 
 /**
- * @brief MoteurPhysique::initialiserSol
+ * @brief MoteurPhysique::initialiserSol TMP
  */
 void MoteurPhysique::initialiserSolTest(){
     mGestSol . ajoutSol();
     Sol * solTest = mGestSol . recupSol( 0 );
-    if( ! solTest )return;
+    assert( solTest && "solTest non instancié\n" );
 
-    std::pair< float, float > pairFloat( 0.0, 0.0 );
+    Vector2D vect2dPoint( ZERO_FLOAT, ZERO_FLOAT );
 
-    if( ! solTest -> bAjoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
-    if( ! solTest -> bAjoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
-    pairFloat . first = -150.0;
-    pairFloat . second = 654.0;
-    if( ! solTest -> bAjoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
-    pairFloat . first = 150.0;
-    pairFloat . second = 654.0;
-    if( ! solTest -> bAjoutPoint( pairFloat ) )std::cout << "point non ajouté\n";
+    if( ! solTest -> bAjoutPoint( vect2dPoint ) )std::cout << "point non ajouté\n";
+    if( ! solTest -> bAjoutPoint( vect2dPoint ) )std::cout << "point non ajouté\n";
+    vect2dPoint . mfX = -150.0;
+    vect2dPoint . mfY = 654.0;
+    if( ! solTest -> bAjoutPoint( vect2dPoint ) )std::cout << "point non ajouté\n";
+    vect2dPoint . mfX = 150.0;
+    vect2dPoint . mfY = 654.0;
+    if( ! solTest -> bAjoutPoint( vect2dPoint ) )std::cout << "point non ajouté\n";
     solTest -> afficherFonction();
 }
 
