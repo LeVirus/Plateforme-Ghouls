@@ -1,3 +1,4 @@
+
 #include "fonction.hpp"
 #include "constantes.hpp"
 #include <cassert>
@@ -30,6 +31,7 @@ bool SegmentFonction::bAttribuerPointsSegment( const Vector2D & vect2dA, const V
     if( vect2dA . mfY == vect2dB . mfY )return false;
     mvect2dPointA = vect2dA;
     mvect2dPointB = vect2dB;
+    bCalculConstanteSegment();
     return true;
 }
 
@@ -37,7 +39,7 @@ bool SegmentFonction::bAttribuerPointsSegment( const Vector2D & vect2dA, const V
  * @brief bCalculConstantesFonction Fonction calculant et mémorisant les constantes a et b de la fonction "y = ax + b" du segment.
  * @return false si les points ont la même ordonnée, true si les constantes ont bien été calculées.
  */
-bool SegmentFonction::bCalculConstantesFonction(){
+bool SegmentFonction::bCalculConstantesSegment(){
     if( mvect2dPointA . mfY == mvect2dPointB . mfY )return false;
     //calcul de a :: cohefficient directeur
     mfCstFonctionA = fRetourCohefDirectSegment();

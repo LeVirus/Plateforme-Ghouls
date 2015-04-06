@@ -147,8 +147,21 @@ bool Sol::bAttribuerFonction( std::vector< Vector2D > &vectFonction ){
         bAjoutPoint( vectFonction[ i ] );
     }
     miseAJourBoiteEnglobanteFonction();
+    synchroniserSegmentsPoints();
     return true;
 }
+
+/**
+ * @brief Sol::synchroniserSegmentsPoints Création des segments de la fonction en fonction des points.
+ */
+void Sol::synchroniserSegmentsPoints(){
+    mVectSegmentFonction . clear();
+    mVectSegmentFonction . resize( mVectPointFonction . size() - 1 );
+    for( unsigned int i = 0; i < mVectSegmentFonction.size() ; ++i ){
+        mVectSegmentFonction[ i ] . bAttribuerPointsSegment( mVectPointFonction[ i ], mVectPointFonction[ i + 1 ] );
+    }
+}
+
 
 /**
  * @brief Sol::afficherFonction Affichage des points de la fonction.

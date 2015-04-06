@@ -26,6 +26,7 @@ public:
     bool bAttribuerFonction( std::vector< Vector2D > &vectFonction );
     bool bSuprimmerPoint( unsigned int uiNumPoint );
     void reinitialiserFonction();
+    void synchroniserSegmentsPoints();
 
     bool bVerifCollision( float fX, float fY )const;
     bool bVerifCollisionSolBoiteEnglobante( float fX, float fY )const;
